@@ -6,5 +6,5 @@ class BaseModel(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
-        app_label = "chander_gari"
+        app_label = "joldii"
         abstract = True

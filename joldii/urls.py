@@ -1,7 +1,8 @@
 from django.conf.urls import url
 
-from joldii.views import APIRouter
+from joldii.views import Register
 
 urlpatterns = [
-    url(r'^v1/$', view=APIRouter.as_view(), name="api_router"),
+    url(r'^register/$', view=Register.as_view(), name="register"),
+    url(r'^login/$', view=Register.as_view(), name="login"),
 ]

@@ -26,7 +26,7 @@ class OrderModel(BaseModel):
     status = models.IntegerField(default=0, null=False)
 
     class Meta:
-        app_label = "chander_gari"
+        app_label = "joldii"
         db_table = "order"
 
     @staticmethod

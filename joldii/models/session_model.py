@@ -35,5 +35,5 @@ class SessionModel(BaseModel):
             return None
 
     class Meta:
-        app_label = "chander_gari"
+        app_label = "joldii"
         db_table = "session"
