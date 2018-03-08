@@ -19,14 +19,14 @@ class UserModel(BaseModel):
     user_picture = models.CharField(max_length=128, null=True)
 
     class Meta:
-        app_label = "chander_gari"
+        app_label = "joldii"
         db_table = "user"
 
     def save(self, *args, **kwargs):
         super(UserModel, self).save(*args, **kwargs)
 
     def get_session(self):
-        from chander_gari.models import SessionModel
+        from joldii.models import SessionModel
         try:
             session = SessionModel.objects.get(user=self)
             return session.session_id

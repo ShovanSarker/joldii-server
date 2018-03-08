@@ -11,6 +11,7 @@ from joldii.constants import consts
 class APIRouter(View):
     @staticmethod
     def post(request):
+
         action = request.POST[consts.PARAM_ACTION]
         print action
         if action == consts.ACTION_LOGIN:

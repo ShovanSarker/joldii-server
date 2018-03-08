@@ -11,6 +11,7 @@ class DriverModel(BaseModel):
 
     user = models.ForeignKey(UserModel)
     vehicle_num = models.TextField(max_length=128, null=True)
+    vehicle_name = models.TextField(max_length=128, null=True)
     license_num = models.TextField(max_length=128, null=True)
 
     national_id = models.TextField(max_length=128, null=True)
@@ -19,8 +20,10 @@ class DriverModel(BaseModel):
     curr_lon = models.DecimalField(default=0.0, max_digits=14, decimal_places=7, null=False)
     status = models.IntegerField(default=0, null=False)
 
+    driver_rating = models.DecimalField(default=2.5, max_digits=3, decimal_places=2)
+
     class Meta:
-        app_label = "chander_gari"
+        app_label = "joldii"
         db_table = "driver"
 
     @staticmethod

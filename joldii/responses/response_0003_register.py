@@ -7,14 +7,14 @@ class RegisterResponse(Response):
     Response object for register requests
     """
 
-    def __init__(self, user=None):
+    def __init__(self, user=None, verified=False):
         self.status = Response.STATE_FAIL
         self.response = {}
-        self.set_response(consts.PARAM_ACTION, consts.ACTION_REGISTER)
         self.parse_user(user)
 
-    def parse_user(self, user):
+    def parse_user(self, user, verified=False):
         sid = None
+        self.set_response(consts.PARAM_USER_VERIFIED, verified)
         if user is not None:
             sid = user.get_session()
         if sid is not None:
