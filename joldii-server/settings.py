@@ -13,7 +13,13 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+SETTINGS_DIR = os.path.dirname(__file__)
+PROJECT_PATH = os.path.join(SETTINGS_DIR, os.pardir)
+PROJECT_PATH = os.path.abspath(PROJECT_PATH)
+TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -24,7 +30,7 @@ SECRET_KEY = '_dejk&oxu2617bl@7lqkb*ki2@&d&&-4^_bgx@hyv677x6h*m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.20.6"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.20.6", "192.168.20.11"]
 
 # Application definition
 
@@ -36,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'joldii',
+    'dashboard',
 ]
 
 MIDDLEWARE = [
@@ -111,4 +118,16 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
+STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (
+    STATIC_PATH,
+)
+
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR, 'templates'),
+)
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "media")
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static")
