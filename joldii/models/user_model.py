@@ -17,6 +17,8 @@ class UserModel(BaseModel):
     user_type = models.IntegerField(default=0, null=False)
     is_active = models.BooleanField(default=False)
     user_picture = models.CharField(max_length=128, null=True)
+    curr_lat = models.DecimalField(default=0.0, max_digits=14, decimal_places=7, null=False)
+    curr_lon = models.DecimalField(default=0.0, max_digits=14, decimal_places=7, null=False)
 
     class Meta:
         app_label = "joldii"
