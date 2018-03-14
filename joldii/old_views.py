@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.views import View
 
-from joldii.actions import user_session
+# from joldii.actions import user_session
 from joldii.constants import consts
 
 
@@ -14,14 +14,14 @@ class APIRouter(View):
 
         action = request.POST[consts.PARAM_ACTION]
         print action
-        if action == consts.ACTION_LOGIN:
-            print "Login Request"
-            return user_session.login(request)
+        # if action == consts.ACTION_LOGIN:
+        #     print "Login Request"
+            # return user_session.login(request)
         # elif action is consts.ACTION_PIN_VERIFICATION:
         #     pin_verification(request)
-        elif action == consts.ACTION_REGISTER:
-            print "Register Request"
-            return user_session.register(request)
+        # elif action == consts.ACTION_REGISTER:
+        #     print "Register Request"
+            # return user_session.register(request)
             # elif action is consts.ACTION_FORGET_PASSWORD:
             #     forget_password(request)
             # elif action is consts.ACTION_PROMO:
