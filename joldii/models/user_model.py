@@ -17,8 +17,8 @@ class UserModel(BaseModel):
     user_type = models.IntegerField(default=0, null=False)
     is_active = models.BooleanField(default=False)
     user_picture = models.CharField(max_length=128, null=True)
-    curr_lat = models.DecimalField(default=0.0, max_digits=14, decimal_places=7, null=False)
-    curr_lon = models.DecimalField(default=0.0, max_digits=14, decimal_places=7, null=False)
+    average_rating = models.FloatField(default=0)
+    number_of_rides = models.IntegerField(default=0)
 
     class Meta:
         app_label = "joldii"
@@ -27,16 +27,6 @@ class UserModel(BaseModel):
     def save(self, *args, **kwargs):
         super(UserModel, self).save(*args, **kwargs)
 
-    def get_session(self):
-        from joldii.models import SessionModel
-        try:
-            session = SessionModel.objects.get(user=self)
-            return session.session_id
-        except SessionModel.DoesNotExist:
-            session = SessionModel()
-            session.user = self
-            session.save()
-            return session.session_id
 
     @staticmethod
     def create_random_password(size=5, chars=string.ascii_uppercase + string.digits):
@@ -78,3 +68,4 @@ class UserModel(BaseModel):
                 return user
         except UserModel.DoesNotExist:
             return None
+

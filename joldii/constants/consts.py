@@ -77,7 +77,8 @@ TYPE_USER_RIDER_DRIVER = "3"
 
 """
 Driver Status
-"""
+-"""
+STATUS_NOT_DRIVER = -1
 STATUS_DRIVER_OFFLINE = 0
 STATUS_DRIVER_IN_RIDE = 1
 STATUS_DRIVER_BOOKED = 2
@@ -93,3 +94,19 @@ STATUS_ORDER_COMPLETED = 3
 STATUS_ORDER_REJECTED = 4
 STATUS_ORDER_CANCEL_REQ = 5
 STATUS_ORDER_CANCELLED = 6
+
+"""
+Ride Class
+"""
+RIDE_CLASS_BIKE = 0
+RIDE_CLASS_CAR_PREMIUM = 1
+RIDE_CLASS_CAR_NORMAL = 2
+
+
+# class RideClass():
+#
+#     ride_class = {
+#         'Bike': 1,
+#         'Premium Car': 2,
+#         'Normal Car': 3
+#     }
