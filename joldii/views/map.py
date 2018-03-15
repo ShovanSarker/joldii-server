@@ -29,3 +29,9 @@ class UploadLocation(View):
             print "User save error"
 
             return HttpResponse(response.respond(), content_type="application/json")
+
+
+class FindDrivers(View):
+    @staticmethod
+    def post(request):
+        pass
