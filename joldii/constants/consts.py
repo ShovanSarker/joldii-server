@@ -32,7 +32,7 @@ PARAM_VEHICLE_CAPACITY = "vehicle_capacity"
 PARAM_RIDE_FARE = "fair"
 PARAM_FARE_LIST = "fairs"
 PARAM_HISTORY = "histories"
-
+PARAM_DRIVER_SESSION = "d_sid"
 PARAM_DATE = "date"
 PARAM_HISTORICAL_FARE = "fair"
 PARAM_LOCATION_FROM = "from"
