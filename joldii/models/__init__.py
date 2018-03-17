@@ -3,11 +3,21 @@ from joldii.models.driver_model import DriverModel
 from joldii.models.order_model import OrderModel
 from joldii.models.session_model import SessionModel
 from joldii.models.user_model import UserModel
+from joldii.models.vehicle_model import VehicleClassModel
+from joldii.models.vehicle_model import VehicleModel
+from joldii.models.rating_model import DriverRatingModel
+from joldii.models.rating_model import UserRatingModel
+from joldii.models.ride_model import RideModel
 
 __all__ = [
     "BaseModel",
     "UserModel",
     "SessionModel",
     "DriverModel",
-    "OrderModel"
+    "OrderModel",
+    "VehicleClassModel",
+    "VehicleModel",
+    "DriverRatingModel",
+    "UserRatingModel",
+    "RideModel"
 ]
