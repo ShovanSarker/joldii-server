@@ -21,10 +21,13 @@ class UploadLocation(View):
             print "Required parameter exception"
 
         try:
-            user = SessionModel.get_user_by_session(sess_id)
-            user.curr_lat = curr_lat
-            user, curr_lng = curr_lng
-            user.save()
+            sess = SessionModel.get_session_by_id(sess_id)
+            print sess.current_lat
+            sess.current_lat = curr_lat
+            sess.current_lon = curr_lng
+            sess.save()
+
+            response.set_status(UpdateLocationResponse.STATE_SUCCESS);
         except:
             print "User save error"
 

@@ -7,10 +7,9 @@ class UpdateLocationResponse(Response):
     Response object for forget_password requests
     """
 
-    def __init__(self, state=False):
+    def __init__(self):
         self.status = Response.STATE_FAIL
         self.response = {}
-        self.parse_response(state)
 
     def parse_response(self, state):
         if state is True:
