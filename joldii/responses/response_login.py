@@ -1,4 +1,5 @@
 from base_response import Response
+from joldii.models import SessionModel
 from ..constants import consts
 
 
@@ -18,7 +19,7 @@ class LoginResponse(Response):
             username = user.username
             email = user.email
             pic = user.user_picture
-            sid = user.get_session()
+            sid = SessionModel.get_session(user)
             self.set_status(Response.STATE_SUCCESS)
             self.set_response(consts.PARAM_SESSION_ID, sid)
             self.set_response(consts.PARAM_USER_NAME, username)

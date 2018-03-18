@@ -1,11 +1,11 @@
-from django.views import View
 from django.http import HttpResponse
+from django.views import View
 
 from joldii.constants import consts
 from joldii.models import DriverModel
 from joldii.models import UserModel
-from joldii.responses import response_0001_login
-from joldii.responses import response_0003_register
+from joldii.responses import response_login
+from joldii.responses import response_register
 
 
 class Login(View):
@@ -17,10 +17,11 @@ class Login(View):
         try:
             phone = request.POST[consts.PARAM_PHONE]
             password = request.POST[consts.PARAM_PASSWORD]
+            # todo add mode
         except:
             print ("Parameter Exception")
         user = UserModel.get_user_by_phone_password(phone, password)
-        response = response_0001_login.LoginResponse(user)
+        response = response_login.LoginResponse(user)
         return HttpResponse(response.respond(), content_type="application/json")
 
 
@@ -93,7 +94,7 @@ class Register(View):
             print "User registration failed"
             user = None
         print verified, type
-        response = response_0003_register.RegisterResponse(user, verified)
+        response = response_register.RegisterResponse(user, verified)
         return HttpResponse(response.respond(), content_type="application/json")
 
 

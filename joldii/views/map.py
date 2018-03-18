@@ -31,7 +31,7 @@ class UploadLocation(View):
         except:
             print "User save error"
 
-            return HttpResponse(response.respond(), content_type="application/json")
+        return HttpResponse(response.respond(), content_type="application/json")
 
 
 class FindDrivers(View):

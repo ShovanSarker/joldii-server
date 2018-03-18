@@ -1,4 +1,5 @@
 from base_response import Response
+from joldii.models import SessionModel
 from ..constants import consts
 
 
@@ -16,7 +17,7 @@ class RegisterResponse(Response):
         sid = None
         self.set_response(consts.PARAM_USER_VERIFIED, verified)
         if user is not None:
-            sid = user.get_session()
+            sid = SessionModel.get_session(user)
             username = user.username
             email = user.email
             pic = user.user_picture
