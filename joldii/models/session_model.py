@@ -43,9 +43,9 @@ class SessionModel(BaseModel):
             return None
 
     @staticmethod
-    def get_session_by_id(id):
+    def get_session_by_id(sid):
         try:
-            return SessionModel.objects.get(pk=id)
+            return SessionModel.objects.get(pk=sid)
         except SessionModel.DoesNotExist:
             return None
 

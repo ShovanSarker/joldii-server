@@ -2,10 +2,14 @@ from django.http import HttpResponse
 from django.views import View
 
 from joldii.constants import consts
+
 from joldii.models import DriverModel
 from joldii.models import UserModel
+from joldii.models import SessionModel
+
 from joldii.responses import response_login
 from joldii.responses import response_register
+from joldii.responses import response_incorrect_parameters
 
 
 class Login(View):
@@ -17,12 +21,25 @@ class Login(View):
         try:
             phone = request.POST[consts.PARAM_PHONE]
             password = request.POST[consts.PARAM_PASSWORD]
-            # todo add mode
+            '''mention the app type[driver ]'''
+            app_type = request.POST[consts.PARAM_APP_TYPE]
+            user = UserModel.get_user_by_phone_password(phone, password)
+            if user is not None:
+                if app_type == 'driver':
+                    is_driver = 1
+                else:
+                    is_driver = 0
+                session = SessionModel(
+                    user=user,
+                    is_driver=is_driver
+
+                )
+            response = response_login.LoginResponse(user)
+            return HttpResponse(response.respond(), content_type="application/json")
         except:
-            print ("Parameter Exception")
-        user = UserModel.get_user_by_phone_password(phone, password)
-        response = response_login.LoginResponse(user)
-        return HttpResponse(response.respond(), content_type="application/json")
+            response = response_incorrect_parameters.IncorrectParametersResponse()
+            return HttpResponse(response.respond(), content_type="application/json")
+
 
 
 class Register(View):
