@@ -49,6 +49,15 @@ class GetRideInformation(View):
     @staticmethod
     def post(request):
         all_ride_type = VehicleClassModel.objects.all()
+        all_ride_type_array = []
+        for ride_type in all_ride_type:
+            one_ride = {'type': ride_type.name,
+                        'base_fare': ride_type.base_fare,
+                        'per_kilometer_fare': ride_type.per_kilometer_fare,
+                        'per_minute_fare': ride_type.per_minute_fare,
+                        'maximum_passenger': ride_type.maximum_passenger}
+            all_ride_type_array.append(one_ride)
+        # todo use sid to avail discount for the user
         sess_id = request.POST[consts.PARAM_SESSION_ID]
-        response = GetRideInfoResponse(all_ride_type)
+        response = GetRideInfoResponse(all_ride_type_array)
         return HttpResponse(response.respond(), content_type="application/json")
