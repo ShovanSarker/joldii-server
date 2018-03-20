@@ -3,6 +3,7 @@ from django.conf.urls import url
 from joldii.views import Login
 from joldii.views import Register
 from joldii.views import UploadLocation
+from joldii.views import AddVehicle
 
 urlpatterns = [
     url(r'^register', view=Register.as_view(), name="register"),
@@ -12,4 +13,5 @@ urlpatterns = [
 
     url(r'^upload_position', view=UploadLocation.as_view(), name="upload_position"),
     url(r'^find_drivers', view=UploadLocation.as_view(), name="find_drivers"),
+    url(r'^add_vehicle', view=AddVehicle.as_view(), name="add_vehicle"),
 ]
