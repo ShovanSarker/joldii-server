@@ -4,7 +4,10 @@ from django.http import HttpResponse
 from django.views import View
 
 from joldii.constants import consts
+
 from joldii.models import SessionModel
+from joldii.models import VehicleClassModel
+
 from joldii.responses.response_update_location import UpdateLocationResponse
 
 
@@ -38,3 +41,13 @@ class FindDrivers(View):
     @staticmethod
     def post(request):
         pass
+
+
+class GetRideInformation(View):
+
+    @staticmethod
+    def post(request):
+        all_ride_type = VehicleClassModel.objects.all()
+        sess_id = request.POST[consts.PARAM_SESSION_ID]
+        response = GetRideInformation(all_ride_type)
+        return HttpResponse(response.respond(), content_type="application/json")

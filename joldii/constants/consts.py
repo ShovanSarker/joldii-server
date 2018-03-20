@@ -40,6 +40,7 @@ PARAM_LOCATION_FROM = "from"
 PARAM_LOCATION_TO = "to"
 PARAM_TRIP_SNAP = "trip_snap"
 PARAM_APP_TYPE = "app_type"
+PARAM_DATA = "data"
 
 """
 Actions
