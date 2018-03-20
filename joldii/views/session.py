@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.views import View
 
+from random import randint
+
 from joldii.constants import consts
 
 from joldii.models import DriverModel
@@ -26,9 +28,9 @@ class Login(View):
             user = UserModel.get_user_by_phone_password(phone, password)
             if user is not None:
                 if app_type == 'driver':
-                    is_driver = 1
+                    is_driver = True
                 else:
-                    is_driver = 0
+                    is_driver = False
                 session = SessionModel(
                     user=user,
                     is_driver=is_driver
@@ -41,78 +43,122 @@ class Login(View):
             return HttpResponse(response.respond(), content_type="application/json")
 
 
-
 class Register(View):
 
     @staticmethod
     def post(request):
         print request.POST
         optional = True
-        type = None
+        user_type = None
         try:
             phone = request.POST[consts.PARAM_PHONE]
             name = request.POST[consts.PARAM_USER_NAME]
-            email = request.POST[consts.PARAM_USER_MAIL]
             password = request.POST[consts.PARAM_PASSWORD]
-            type = request.POST[consts.PARAM_USER_TYPE]
 
+            if consts.PARAM_APP_TYPE in request.POST:
+                app_type = request.POST[consts.PARAM_APP_TYPE]
+            else:
+                app_type = 'user'
 
-        except:
-            print ("Parameter Exception")
+            if consts.PARAM_USER_MAIL in request.POST:
+                email = request.POST[consts.PARAM_USER_MAIL]
+            else:
+                email = ''
 
-        try:
-            profile_pic = request.POST[consts.PARAM_USER_PIC]
-            optional = False
-        except:
-            print ("Optional Parameter Exception")
-        try:
-            driving_license = request.POST[consts.PARAM_DRIVER_LICENSE]
-            optional = False
-        except:
-            print ("Optional Parameter Exception")
-        try:
-            vehicle_name = request.POST[consts.PARAM_VEHICLE_NAME]
-            optional = False
-        except:
-            print ("Optional Parameter Exception")
-        try:
-            vehicle_registration = request.POST[consts.PARAM_VEHICLE_NUMBER]
-            optional = False
-        except:
-            print ("Optional Parameter Exception")
+            if consts.PARAM_USER_ADDRESS in request.POST:
+                address = request.POST[consts.PARAM_USER_ADDRESS]
+            else:
+                address = ''
 
-        verified = False
-        try:
-            user = UserModel()
-            user.username = name
-            user.phone = phone
-            user.email = email
-            user.password = UserModel.encrypt_password(password)
-            user.user_type = type
-            if type == consts.TYPE_USER_RIDER:
-                verified = True
-            user.is_active = 0
+            if app_type == 'driver':
+                user_type = 2
+            else:
+                user_type = 1
+
+            user = UserModel(
+                username=name,
+                email=email,
+                phone=phone,
+                password=UserModel.encrypt_password(password),
+                address=address,
+                user_type=user_type,
+                is_active=True
+            )
             user.save()
 
-            if optional is True:
-                try:
-                    driver = DriverModel()
-                    driver.user = user
-                    driver.status = consts.STATUS_DRIVER_OFFLINE
-                    driver.license_num = driving_license
-                    driver.vehicle_num = vehicle_registration
-                    driver.vehicle_name = vehicle_name
-                    driver.save()
-                    verified = True
-                except:
-                    print "Driver registration failed"
+            if consts.PARAM_USER_PIC in request.FILES:
+                user.user_picture = request.FILES[consts.PARAM_USER_PIC]
+                user.save()
 
+            """
+            for pin
+            """
+            # pin = str(randint(1001, 9999))
+            # user.pin = pin
+            # user.save()
+            #
+            # #todo add sms api to send user the pin for account verification
+
+            """
+            for pin
+            """
+
+            response = response_register.RegisterResponse(user, True)
+            return HttpResponse(response.respond(), content_type="application/json")
         except:
-            print "User registration failed"
-            user = None
-        print verified, type
-        response = response_register.RegisterResponse(user, verified)
-        return HttpResponse(response.respond(), content_type="application/json")
+            response = response_incorrect_parameters.IncorrectParametersResponse()
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+
+        # try:
+        #     driving_license = request.POST[consts.PARAM_DRIVER_LICENSE]
+        #     optional = False
+        # except:
+        #     print ("Optional Parameter Exception")
+        # try:
+        #     vehicle_name = request.POST[consts.PARAM_VEHICLE_NAME]
+        #     optional = False
+        # except:
+        #     print ("Optional Parameter Exception")
+        # try:
+        #     vehicle_registration = request.POST[consts.PARAM_VEHICLE_NUMBER]
+        #     optional = False
+        # except:
+        #     print ("Optional Parameter Exception")
+        #
+        # verified = False
+        # try:
+        #
+        #     user.username = name
+        #     user.phone = phone
+        #     user.email = email
+        #     user.password = UserModel.encrypt_password(password)
+        #     user.user_type = type
+        #     if type == consts.TYPE_USER_RIDER:
+        #         verified = True
+        #     user.is_active = 0
+        #     user.save()
+        #
+        #     if optional is True:
+        #         try:
+        #             driver = DriverModel()
+        #             driver.user = user
+        #             driver.status = consts.STATUS_DRIVER_OFFLINE
+        #             driver.license_num = driving_license
+        #             driver.vehicle_num = vehicle_registration
+        #             driver.vehicle_name = vehicle_name
+        #             driver.save()
+        #             verified = True
+        #         except:
+        #             print "Driver registration failed"
+        #
+        # except:
+        #     print "User registration failed"
+        #     user = None
+        # print verified, type
+        # response = response_register.RegisterResponse(user, verified)
+        # return HttpResponse(response.respond(), content_type="application/json")
 
 
 class PinVerification(View):

@@ -9,16 +9,18 @@ from base_model import BaseModel
 
 
 class UserModel(BaseModel):
-    username = models.CharField(max_length=128, null=False)
+    username = models.CharField(max_length=128)
     email = models.CharField(max_length=128, null=True)
     phone = models.CharField(max_length=32, null=True, unique=True)
     password = models.CharField(max_length=128, null=False)
     address = models.CharField(max_length=256, null=True)
     user_type = models.IntegerField(default=0, null=False)
     is_active = models.BooleanField(default=False)
-    user_picture = models.CharField(max_length=128, null=True)
+    user_picture = models.FileField(upload_to='profile/', null=True)
     average_rating = models.FloatField(default=0)
     number_of_rides = models.IntegerField(default=0)
+    pin = models.CharField(max_length=4, default='1234')
+    pin_verified = models.BooleanField(default=False)
 
     class Meta:
         app_label = "joldii"
