@@ -9,6 +9,7 @@ from joldii.models import SessionModel
 from joldii.models import VehicleClassModel
 
 from joldii.responses.response_update_location import UpdateLocationResponse
+from joldii.responses.response_get_ride_info import GetRideInfoResponse
 
 
 class UploadLocation(View):
@@ -49,5 +50,5 @@ class GetRideInformation(View):
     def post(request):
         all_ride_type = VehicleClassModel.objects.all()
         sess_id = request.POST[consts.PARAM_SESSION_ID]
-        response = GetRideInformation(all_ride_type)
+        response = GetRideInfoResponse(all_ride_type)
         return HttpResponse(response.respond(), content_type="application/json")

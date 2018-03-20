@@ -3,12 +3,7 @@ from __future__ import unicode_literals
 from django.http import HttpResponse
 from django.views import View
 
-from joldii.constants import consts
-
-from joldii.models import SessionModel
 from joldii.models import VehicleClassModel
-
-from joldii.responses.response_update_location import UpdateLocationResponse
 
 
 class AddVehicle(View):
