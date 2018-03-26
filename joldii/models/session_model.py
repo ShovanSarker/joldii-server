@@ -23,7 +23,8 @@ class SessionModel(BaseModel):
         db_table = "session"
 
     def save(self, *args, **kwargs):
-        self.session_id = UUID.uuid_generator()
+        if not SessionModel.objects.filter(pk=self.session_id).exists():
+            self.session_id = UUID.uuid_generator()
         super(SessionModel, self).save(*args, **kwargs)
 
     @staticmethod

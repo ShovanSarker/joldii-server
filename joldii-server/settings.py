@@ -69,6 +69,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
+        'TEMPLATE_DIRS': {
+            os.path.join(BASE_DIR, 'templates'),
+        },
     },
 ]
 
@@ -122,10 +125,6 @@ STATIC_PATH = os.path.join(PROJECT_PATH, 'static')
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     STATIC_PATH,
-)
-
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
 )
 
 MEDIA_URL = '/media/'
