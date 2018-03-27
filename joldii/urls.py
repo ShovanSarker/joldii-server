@@ -7,6 +7,7 @@ from joldii.views import AddVehicle
 from joldii.views import GetRideInformation
 
 from joldii.views import Users
+from joldii.views import SessionList
 
 urlpatterns = [
     url(r'^register', view=Register.as_view(), name="register"),
@@ -21,4 +22,5 @@ urlpatterns = [
 
 
     url(r'^test/users', view=Users.as_view(), name="test_users"),
+    url(r'^test/sessions', view=SessionList.as_view(), name="test_sessions"),
 ]

@@ -32,15 +32,38 @@ class Login(View):
                     is_driver = True
                 else:
                     is_driver = False
+                if SessionModel.objects.filter(user=user).exists():
+                    existing_sessions = SessionModel.objects.filter(user=user)
+                    for existing_session in existing_sessions:
+                        existing_session.delete()
+
                 session = SessionModel(
                     user=user,
                     is_driver=is_driver
 
                 )
-            response = response_login.LoginResponse(user)
-            return HttpResponse(response.respond(), content_type="application/json")
+
+                session.save()
+                user_data = {
+                    'session_id': session.session_id,
+                    'user_name': session.user.username,
+                    'user_rating': session.user.average_rating,
+                    'user_phone': session.user.phone,
+                    'user_photo_url': str(session.user.user_picture)
+                }
+                response = common_response.CommonResponse(success=True,
+                                                          data=user_data,
+                                                          error_code=consts.ERROR_NONE)
+                return HttpResponse(response.respond(), content_type="application/json")
+            else:
+                response = common_response.CommonResponse(success=False,
+                                                          reason='Incorrect Phone Number or Password',
+                                                          error_code=consts.ERROR_INCORRECT_PHONE_OR_PASSWORD)
+                return HttpResponse(response.respond(), content_type="application/json")
         except:
-            response = response_incorrect_parameters.IncorrectParametersResponse()
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
             return HttpResponse(response.respond(), content_type="application/json")
 
 
@@ -117,57 +140,6 @@ class Register(View):
                                                       reason='Incorrect Parameters',
                                                       error_code=consts.ERROR_INCORRECT_PARAMETERS)
             return HttpResponse(response.respond(), content_type="application/json")
-
-
-
-            # try:
-            #     driving_license = request.POST[consts.PARAM_DRIVER_LICENSE]
-            #     optional = False
-            # except:
-            #     print ("Optional Parameter Exception")
-            # try:
-            #     vehicle_name = request.POST[consts.PARAM_VEHICLE_NAME]
-            #     optional = False
-            # except:
-            #     print ("Optional Parameter Exception")
-            # try:
-            #     vehicle_registration = request.POST[consts.PARAM_VEHICLE_NUMBER]
-            #     optional = False
-            # except:
-            #     print ("Optional Parameter Exception")
-            #
-            # verified = False
-            # try:
-            #
-            #     user.username = name
-            #     user.phone = phone
-            #     user.email = email
-            #     user.password = UserModel.encrypt_password(password)
-            #     user.user_type = type
-            #     if type == consts.TYPE_USER_RIDER:
-            #         verified = True
-            #     user.is_active = 0
-            #     user.save()
-            #
-            #     if optional is True:
-            #         try:
-            #             driver = DriverModel()
-            #             driver.user = user
-            #             driver.status = consts.STATUS_DRIVER_OFFLINE
-            #             driver.license_num = driving_license
-            #             driver.vehicle_num = vehicle_registration
-            #             driver.vehicle_name = vehicle_name
-            #             driver.save()
-            #             verified = True
-            #         except:
-            #             print "Driver registration failed"
-            #
-            # except:
-            #     print "User registration failed"
-            #     user = None
-            # print verified, type
-            # response = response_register.RegisterResponse(user, verified)
-            # return HttpResponse(response.respond(), content_type="application/json")
 
 
 class PinVerification(View):
