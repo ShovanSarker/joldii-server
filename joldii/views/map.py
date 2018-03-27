@@ -31,7 +31,7 @@ class UploadLocation(View):
             sess.current_lon = curr_lng
             sess.save()
 
-            response.set_status(UpdateLocationResponse.STATE_SUCCESS);
+            response.set_status(UpdateLocationResponse.STATE_SUCCESS)
         except:
             print "User save error"
 
