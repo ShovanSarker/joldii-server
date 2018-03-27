@@ -55,7 +55,8 @@ class GetRideInformation(View):
                         'base_fare': ride_type.base_fare,
                         'per_kilometer_fare': ride_type.per_kilometer_fare,
                         'per_minute_fare': ride_type.per_minute_fare,
-                        'maximum_passenger': ride_type.maximum_passenger}
+                        'maximum_passenger': ride_type.maximum_passenger,
+                        'discount': ride_type.maximum_passenger}
             all_ride_type_array.append(one_ride)
         # todo use sid to avail discount for the user
         sess_id = request.POST[consts.PARAM_SESSION_ID]
