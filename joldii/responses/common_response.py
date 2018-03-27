@@ -15,7 +15,7 @@ class CommonResponse(Response):
         else:
             self.status = Response.STATE_FAIL
 
-        self.response = {}
+        # self.response = {}
         self.set_response(consts.REASON, reason)
         self.set_response(consts.DATA, data)
         self.set_response(consts.ERROR_CODE, error_code)
