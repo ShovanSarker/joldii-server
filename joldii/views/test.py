@@ -26,8 +26,10 @@ class Users(View):
                              'pin': one_user.pin
                              }
             user_array.append(one_user_info)
-        response = common_response.CommonResponse(success=False,
+        user_array = {'YOY':'DISCO'}
+        response = common_response.CommonResponse(success=True,
                                                   reason='Phone Number Already Registered',
                                                   error_code=consts.ERROR_USER_PRESENT,
-                                                  data=json.dumps(user_array))
+                                                  data=user_array)
+        # print(response)
         return HttpResponse(response.respond(), content_type="application/json")
