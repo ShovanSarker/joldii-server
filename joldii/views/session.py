@@ -78,7 +78,8 @@ class Register(View):
             if UserModel.objects.filter(phone=phone).exists():
                 response = common_response.CommonResponse(success=False,
                                                           reason='Phone Number Already Registered',
-                                                          error_code=consts.ERROR_USER_PRESENT)
+                                                          error_code=consts.ERROR_USER_PRESENT,
+                                                          data='')
                 return HttpResponse(response.respond(), content_type="application/json")
             else:
                 user = UserModel(
