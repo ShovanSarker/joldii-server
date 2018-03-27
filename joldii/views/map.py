@@ -50,35 +50,35 @@ class GetRideInformation(View):
 
     @staticmethod
     def post(request):
-        try:
-            all_ride_type = VehicleClassModel.objects.all()
-            all_ride_type_array = []
-            sess_id = request.POST[consts.PARAM_SESSION_ID]
-            user = SessionModel.get_user_by_session(sess_id)
+        # try:
+        all_ride_type = VehicleClassModel.objects.all()
+        all_ride_type_array = []
+        sess_id = request.POST[consts.PARAM_SESSION_ID]
+        user = SessionModel.get_user_by_session(sess_id)
 
-            for ride_type in all_ride_type:
-                discount = 0
-                if PromoModel.objects.filter(vehicle_type=ride_type).exists():
-                    for on_going_promo in PromoModel.objects.filter(vehicle_type=ride_type):
-                        if UserPromoModel.objects.filter(promo=on_going_promo, user=user).exists():
-                            if UserPromoModel.objects.filter(promo=on_going_promo, user=user)[0].remaining_ride > 0:
-                                discount = on_going_promo.discount
-                one_ride = {'type': ride_type.name,
-                            'base_fare': ride_type.base_fare,
-                            'per_kilometer_fare': ride_type.per_kilometer_fare,
-                            'per_minute_fare': ride_type.per_minute_fare,
-                            'maximum_passenger': ride_type.maximum_passenger,
-                            'discount': discount}
-                all_ride_type_array.append(one_ride)
-            # todo use sid to avail discount for the user
-            #
-            response = common_response.CommonResponse(success=True,
-                                                      reason='All Type of Rides',
-                                                      data=all_ride_type_array,
-                                                      error_code=consts.ERROR_NONE)
-            return HttpResponse(response.respond(), content_type="application/json")
-        except:
-            response = common_response.CommonResponse(success=False,
-                                                      reason='Incorrect Parameters',
-                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
-            return HttpResponse(response.respond(), content_type="application/json")
+        for ride_type in all_ride_type:
+            discount = 0
+            if PromoModel.objects.filter(vehicle_type=ride_type).exists():
+                for on_going_promo in PromoModel.objects.filter(vehicle_type=ride_type):
+                    if UserPromoModel.objects.filter(promo=on_going_promo, user=user).exists():
+                        if UserPromoModel.objects.filter(promo=on_going_promo, user=user)[0].remaining_ride > 0:
+                            discount = on_going_promo.discount
+            one_ride = {'type': ride_type.name,
+                        'base_fare': ride_type.base_fare,
+                        'per_kilometer_fare': ride_type.per_kilometer_fare,
+                        'per_minute_fare': ride_type.per_minute_fare,
+                        'maximum_passenger': ride_type.maximum_passenger,
+                        'discount': discount}
+            all_ride_type_array.append(one_ride)
+        # todo use sid to avail discount for the user
+        #
+        response = common_response.CommonResponse(success=True,
+                                                  reason='All Type of Rides',
+                                                  data=all_ride_type_array,
+                                                  error_code=consts.ERROR_NONE)
+        return HttpResponse(response.respond(), content_type="application/json")
+        # except:
+        #     response = common_response.CommonResponse(success=False,
+        #                                               reason='Incorrect Parameters',
+        #                                               error_code=consts.ERROR_INCORRECT_PARAMETERS)
+        #     return HttpResponse(response.respond(), content_type="application/json")
