@@ -14,7 +14,7 @@ from joldii.responses.response_update_location import UpdateLocationResponse
 from joldii.responses import common_response
 
 
-class UploadLocation(View):
+class AddPromo(View):
     @staticmethod
     def post(request):
         response = UpdateLocationResponse()
@@ -70,8 +70,6 @@ class GetRideInformation(View):
                             'maximum_passenger': ride_type.maximum_passenger,
                             'discount': discount}
                 all_ride_type_array.append(one_ride)
-            # todo use sid to avail discount for the user
-            #
             response = common_response.CommonResponse(success=True,
                                                       reason='All Type of Rides',
                                                       data=all_ride_type_array,
