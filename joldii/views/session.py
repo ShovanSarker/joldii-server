@@ -48,63 +48,64 @@ class Register(View):
     @staticmethod
     def post(request):
         print request.POST
-        optional = True
-        user_type = None
-        # try:
-        phone = request.POST[consts.PARAM_PHONE]
-        name = request.POST[consts.PARAM_USER_NAME]
-        password = request.POST[consts.PARAM_PASSWORD]
-
-        if consts.PARAM_APP_TYPE in request.POST:
-            app_type = request.POST[consts.PARAM_APP_TYPE]
-        else:
-            app_type = 'user'
-
-        if consts.PARAM_USER_MAIL in request.POST:
-            email = request.POST[consts.PARAM_USER_MAIL]
-        else:
-            email = ''
-
-        if consts.PARAM_USER_ADDRESS in request.POST:
-            address = request.POST[consts.PARAM_USER_ADDRESS]
-        else:
-            address = ''
-
-        if app_type == 'driver':
-            user_type = 2
-        else:
-            user_type = 1
-
-        user = UserModel(
-            username=name,
-            email=email,
-            phone=phone,
-            password=UserModel.encrypt_password(password),
-            address=address,
-            user_type=user_type,
-            is_active=True
-        )
-        user.save()
-
-        if consts.PARAM_USER_PIC in request.FILES:
-            user.user_picture = request.FILES[consts.PARAM_USER_PIC]
-            user.save()
-
-        """
-        for pin
-        """
-        # pin = str(randint(1001, 9999))
-        # user.pin = pin
+        # optional = True
+        # user_type = None
+        # # try:
+        # phone = request.POST[consts.PARAM_PHONE]
+        # name = request.POST[consts.PARAM_USER_NAME]
+        # password = request.POST[consts.PARAM_PASSWORD]
+        #
+        # if consts.PARAM_APP_TYPE in request.POST:
+        #     app_type = request.POST[consts.PARAM_APP_TYPE]
+        # else:
+        #     app_type = 'user'
+        #
+        # if consts.PARAM_USER_MAIL in request.POST:
+        #     email = request.POST[consts.PARAM_USER_MAIL]
+        # else:
+        #     email = ''
+        #
+        # if consts.PARAM_USER_ADDRESS in request.POST:
+        #     address = request.POST[consts.PARAM_USER_ADDRESS]
+        # else:
+        #     address = ''
+        #
+        # if app_type == 'driver':
+        #     user_type = 2
+        # else:
+        #     user_type = 1
+        #
+        # user = UserModel(
+        #     username=name,
+        #     email=email,
+        #     phone=phone,
+        #     password=UserModel.encrypt_password(password),
+        #     address=address,
+        #     user_type=user_type,
+        #     is_active=True
+        # )
         # user.save()
         #
-        # #todo add sms api to send user the pin for account verification
-
-        """
-        for pin
-        """
-
-        response = response_register.RegisterResponse(user, True)
-        return HttpResponse(response.respond(), content_type="application/json")
+        # if consts.PARAM_USER_PIC in request.FILES:
+        #     user.user_picture = request.FILES[consts.PARAM_USER_PIC]
+        #     user.save()
+        #
+        # """
+        # for pin
+        # """
+        # # pin = str(randint(1001, 9999))
+        # # user.pin = pin
+        # # user.save()
+        # #
+        # # #todo add sms api to send user the pin for account verification
+        #
+        # """
+        # for pin
+        # """
+        #
+        # response = response_register.RegisterResponse(user, True)
+        # return HttpResponse(response.respond(), content_type="application/json")
+        return HttpResponse(request.POST, content_type="application/json")
         # except:
         #     response = response_incorrect_parameters.IncorrectParametersResponse()
         #     return HttpResponse(response.respond(), content_type="application/json")

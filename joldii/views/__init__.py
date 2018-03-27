@@ -11,5 +11,6 @@ __all__ = ["Register",
            "UploadLocation",
            "AddVehicle",
            "GetRideInformation",
+
            "Users"
            ]
