@@ -51,72 +51,72 @@ class Register(View):
         print request.POST
         optional = True
         user_type = None
-        # try:
-        phone = request.POST[consts.PARAM_PHONE]
-        name = request.POST[consts.PARAM_USER_NAME]
-        password = request.POST[consts.PARAM_PASSWORD]
+        try:
+            phone = request.POST[consts.PARAM_PHONE]
+            name = request.POST[consts.PARAM_USER_NAME]
+            password = request.POST[consts.PARAM_PASSWORD]
 
-        if consts.PARAM_APP_TYPE in request.POST:
-            app_type = request.POST[consts.PARAM_APP_TYPE]
-        else:
-            app_type = 'user'
+            if consts.PARAM_APP_TYPE in request.POST:
+                app_type = request.POST[consts.PARAM_APP_TYPE]
+            else:
+                app_type = 'user'
 
-        if consts.PARAM_USER_MAIL in request.POST:
-            email = request.POST[consts.PARAM_USER_MAIL]
-        else:
-            email = ''
+            if consts.PARAM_USER_MAIL in request.POST:
+                email = request.POST[consts.PARAM_USER_MAIL]
+            else:
+                email = ''
 
-        if consts.PARAM_USER_ADDRESS in request.POST:
-            address = request.POST[consts.PARAM_USER_ADDRESS]
-        else:
-            address = ''
+            if consts.PARAM_USER_ADDRESS in request.POST:
+                address = request.POST[consts.PARAM_USER_ADDRESS]
+            else:
+                address = ''
 
-        if app_type == 'driver':
-            user_type = 2
-        else:
-            user_type = 1
-        if UserModel.objects.filter(phone=phone).exists():
-            response = common_response.CommonResponse(success=False,
-                                                      reason='Phone Number Already Registered',
-                                                      error_code=consts.ERROR_USER_PRESENT)
+            if app_type == 'driver':
+                user_type = 2
+            else:
+                user_type = 1
+            if UserModel.objects.filter(phone=phone).exists():
+                response = common_response.CommonResponse(success=False,
+                                                          reason='Phone Number Already Registered',
+                                                          error_code=consts.ERROR_USER_PRESENT)
+                return HttpResponse(response.respond(), content_type="application/json")
+            else:
+                user = UserModel(
+                    username=name,
+                    email=email,
+                    phone=phone,
+                    password=UserModel.encrypt_password(password),
+                    address=address,
+                    user_type=user_type,
+                    is_active=True
+                )
+                user.save()
+
+            if consts.PARAM_USER_PIC in request.FILES:
+                user.user_picture = request.FILES[consts.PARAM_USER_PIC]
+                user.save()
+
+            """
+            for pin
+            """
+            # pin = str(randint(1001, 9999))
+            # user.pin = pin
+            # user.save()
+            #
+            # #todo add sms api to send user the pin for account verification
+
+            """
+            for pin
+            """
+
+            response = common_response.CommonResponse(success=True,
+                                                      error_code=consts.ERROR_NONE)
             return HttpResponse(response.respond(), content_type="application/json")
-        else:
-            user = UserModel(
-                username=name,
-                email=email,
-                phone=phone,
-                password=UserModel.encrypt_password(password),
-                address=address,
-                user_type=user_type,
-                is_active=True
-            )
-            user.save()
-
-        if consts.PARAM_USER_PIC in request.FILES:
-            user.user_picture = request.FILES[consts.PARAM_USER_PIC]
-            user.save()
-
-        """
-        for pin
-        """
-        # pin = str(randint(1001, 9999))
-        # user.pin = pin
-        # user.save()
-        #
-        # #todo add sms api to send user the pin for account verification
-
-        """
-        for pin
-        """
-
-        response = common_response.CommonResponse(success=True,
-                                                  error_code=consts.ERROR_NONE)
-        return HttpResponse(response.respond(), content_type="application/json")
-        # except:
-        #     response = common_response.CommonResponse(success=False,
-        #                                               reason='Incorrect Parameters',
-        #                                               error_code=consts.ERROR_INCORRECT_PARAMETERS)
-        #     return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
 
 
 
