@@ -2,10 +2,14 @@ from __future__ import unicode_literals
 
 import json
 
+from joldii.constants import consts
+
 from django.http import HttpResponse
 from django.views import View
 
 from joldii.models import UserModel
+
+from joldii.responses import common_response
 
 
 class Users(View):
@@ -22,4 +26,8 @@ class Users(View):
                              'pin': one_user.pin
                              }
             user_array.append(one_user_info)
-        return HttpResponse(json.dumps(user_array), content_type="application/json")
+        response = common_response.CommonResponse(success=False,
+                                                  reason='Phone Number Already Registered',
+                                                  error_code=consts.ERROR_USER_PRESENT,
+                                                  data=json.dumps(user_array))
+        return HttpResponse(response.respond(), content_type="application/json")
