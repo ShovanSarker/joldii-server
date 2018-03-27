@@ -47,6 +47,7 @@ class Login(View):
                 user_data = {
                     'session_id': session.session_id,
                     'user_name': session.user.username,
+                    'user_email': session.user.email,
                     'user_rating': session.user.average_rating,
                     'user_phone': session.user.phone,
                     'user_photo_url': str(session.user.user_picture)
