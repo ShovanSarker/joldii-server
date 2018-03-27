@@ -37,6 +37,9 @@ class UploadLocation(View):
         except:
             print "User save error"
 
+        response = common_response.CommonResponse(success=True,
+                                                  reason='Location Successfully Added',
+                                                  error_code=consts.ERROR_NONE)
         return HttpResponse(response.respond(), content_type="application/json")
 
 

@@ -66,6 +66,7 @@ class RedeemPromo(View):
                                                     remaining_ride=selected_promo.maximum_number_of_discount)
                     new_user_promo.save()
                     response = common_response.CommonResponse(success=True,
+                                                              reason='Promo Successfully Added',
                                                               error_code=consts.ERROR_NONE)
                     return HttpResponse(response.respond(), content_type="application/json")
             else:
