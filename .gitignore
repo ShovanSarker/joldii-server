@@ -52,4 +52,5 @@ fabric.properties
 
 *.pyc
 *.sqlite3
+joldii/migrations/
 
