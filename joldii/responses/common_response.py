@@ -16,6 +16,10 @@ class CommonResponse(Response):
             self.status = Response.STATE_FAIL
 
         self.response = {}
+        self.parse_response(reason, data, error_code)
+
+    def parse_response(self, reason, data, error_code):
+
         self.set_response(consts.REASON, reason)
         self.set_response(consts.DATA, data)
         self.set_response(consts.ERROR_CODE, error_code)
