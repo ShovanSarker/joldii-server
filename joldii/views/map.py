@@ -60,18 +60,18 @@ class GetRideInformation(View):
                 discount = 0
                 if PromoModel.objects.filter(vehicle_type=ride_type).exists():
                     for on_going_promo in PromoModel.objects.filter(vehicle_type=ride_type):
-                        if UserPromoModel.objects.filter(promo=on_going_promo, user=user).exists():
+                        if on_going_promo.promo_active and \
+                                UserPromoModel.objects.filter(promo=on_going_promo, user=user).exists():
                             if UserPromoModel.objects.filter(promo=on_going_promo, user=user)[0].remaining_ride > 0:
                                 discount = on_going_promo.discount
-                one_ride = {'type': ride_type.name,
+                one_ride = {'id': ride_type.id,
+                            'type': ride_type.name,
                             'base_fare': ride_type.base_fare,
                             'per_kilometer_fare': ride_type.per_kilometer_fare,
                             'per_minute_fare': ride_type.per_minute_fare,
                             'maximum_passenger': ride_type.maximum_passenger,
                             'discount': discount}
                 all_ride_type_array.append(one_ride)
-            # todo use sid to avail discount for the user
-            #
             response = common_response.CommonResponse(success=True,
                                                       reason='All Type of Rides',
                                                       data=all_ride_type_array,
