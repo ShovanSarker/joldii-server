@@ -53,11 +53,18 @@ class GetRideInformation(View):
 
     @staticmethod
     def post(request):
+
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
         try:
             all_ride_type = VehicleClassModel.objects.all()
             all_ride_type_array = []
-            sess_id = request.POST[consts.PARAM_SESSION_ID]
-            user = SessionModel.get_user_by_session(sess_id)
 
             for ride_type in all_ride_type:
                 discount = 0
@@ -67,7 +74,7 @@ class GetRideInformation(View):
                                 UserPromoModel.objects.filter(promo=on_going_promo, user=user).exists():
                             if UserPromoModel.objects.filter(promo=on_going_promo, user=user)[0].remaining_ride > 0:
                                 discount = on_going_promo.discount
-                one_ride = {'id': ride_type.id,
+                one_ride = {'vehicle_type': ride_type.id,
                             'type': ride_type.name,
                             'base_fare': ride_type.base_fare,
                             'per_kilometer_fare': ride_type.per_kilometer_fare,

@@ -33,5 +33,5 @@ class RideModel(BaseModel):
 
     def save(self, *args, **kwargs):
         if not RideModel.objects.filter(pk=self.ride_id).exists():
-            self.session_id = UUID.uuid_generator()
+            self.ride_id = UUID.uuid_generator()
         super(RideModel, self).save(*args, **kwargs)

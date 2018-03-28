@@ -5,6 +5,7 @@ from joldii.views.vehicle import AddVehicle
 from joldii.views.map import GetRideInformation
 from joldii.views.promo import AddPromo
 from joldii.views.promo import RedeemPromo
+from joldii.views.trip import SearchRide
 
 from joldii.views.test import Users
 from joldii.views.test import SessionList
@@ -16,6 +17,7 @@ __all__ = ["Register",
            "GetRideInformation",
            "AddPromo",
            "RedeemPromo",
+           "SearchRide",
 
            "Users",
            "SessionList"
