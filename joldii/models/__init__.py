@@ -8,6 +8,8 @@ from joldii.models.vehicle_model import VehicleModel
 from joldii.models.rating_model import DriverRatingModel
 from joldii.models.rating_model import UserRatingModel
 from joldii.models.ride_model import RideModel
+from joldii.models.promo_model import PromoModel
+from joldii.models.promo_model import UserPromoModel
 
 __all__ = [
     "BaseModel",
@@ -19,5 +21,7 @@ __all__ = [
     "VehicleModel",
     "DriverRatingModel",
     "UserRatingModel",
-    "RideModel"
+    "RideModel",
+    "PromoModel",
+    "UserPromoModel"
 ]

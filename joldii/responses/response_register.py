@@ -13,9 +13,9 @@ class RegisterResponse(Response):
         self.response = {}
         self.parse_user(user, verified)
 
+    @staticmethod
     def parse_user(self, user, verified=False):
         sid = None
-        self.set_response(consts.PARAM_USER_VERIFIED, verified)
         if user is not None:
             sid = SessionModel.get_session(user)
             username = user.username
