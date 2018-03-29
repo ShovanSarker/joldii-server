@@ -43,6 +43,7 @@ class SessionList(View):
         user_array = []
         for one_session in all_sessions:
             one_user_info = {'username': one_session.user.username,
+                             'phone': one_session.user.phone,
                              'session_id': one_session.session_id,
                              'current_lat': str(one_session.current_lat),
                              'current_lon': str(one_session.current_lon),

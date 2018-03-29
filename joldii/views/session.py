@@ -8,6 +8,7 @@ from joldii.constants import consts
 from joldii.models import DriverModel
 from joldii.models import UserModel
 from joldii.models import SessionModel
+from joldii.models import VehicleModel
 
 from joldii.responses import response_login
 from joldii.responses import response_register
@@ -42,20 +43,104 @@ class Login(View):
                     is_driver=is_driver
 
                 )
-
                 session.save()
-                user_data = {
-                    'session_id': session.session_id,
-                    'user_name': session.user.username,
-                    'user_email': session.user.email,
-                    'user_rating': session.user.average_rating,
-                    'user_phone': session.user.phone,
-                    'user_photo_url': str(session.user.user_picture)
-                }
-                response = common_response.CommonResponse(success=True,
-                                                          data=user_data,
-                                                          error_code=consts.ERROR_NONE)
-                return HttpResponse(response.respond(), content_type="application/json")
+                if is_driver:
+                    if DriverModel.objects.filter(user=user).exists():
+                        driver = DriverModel.objects.get(user=user)
+                        session.driver_profile = driver
+                        session.save()
+                        if VehicleModel.objects.filter(driver=driver).exists():
+                            driver_data = {
+                                'driver_nid': driver.national_id,
+                                'driver_dl': driver.driving_license,
+                                'driver_rating': driver.average_rating,
+                                'driver_ride_count': driver.number_of_rides
+                            }
+                            all_vehicles = VehicleModel.objects.filter(driver=driver)
+                            vehicle_array = []
+                            for one_vehicle in all_vehicles:
+                                vehicle_data = {
+                                    'registration_number': one_vehicle.registration_number,
+                                    'vehicle_type': one_vehicle.ride_class,
+                                    'vehicle_type_id': one_vehicle.ride_class.pk,
+                                    'vehicle_color': one_vehicle.color
+                                }
+                                vehicle_array.append(vehicle_data)
+                            user_data = {
+                                'session_id': session.session_id,
+                                'user_name': session.user.username,
+                                'user_email': session.user.email,
+                                'user_rating': session.user.average_rating,
+                                'user_phone': session.user.phone,
+                                'user_photo_url': str(session.user.user_picture),
+                                'driver': driver_data,
+                                'vehicle': vehicle_array
+                            }
+                            session.driver_status = consts.STATUS_DRIVER_ONLINE
+                            session.driver_profile = driver
+                            session.save()
+                            response = common_response.CommonResponse(success=True,
+                                                                      data=user_data,
+                                                                      error_code=consts.ERROR_NONE)
+                            return HttpResponse(response.respond(), content_type="application/json")
+                        else:
+                            driver_data = {
+                                'driver_nid': driver.national_id,
+                                'driver_dl': driver.driving_license,
+                                'driver_rating': driver.average_rating,
+                                'driver_ride_count': driver.number_of_rides
+                            }
+                            user_data = {
+                                'session_id': session.session_id,
+                                'user_name': session.user.username,
+                                'user_email': session.user.email,
+                                'user_rating': session.user.average_rating,
+                                'user_phone': session.user.phone,
+                                'user_photo_url': str(session.user.user_picture),
+                                'driver': driver_data,
+                                'vehicle': None
+                            }
+                            session.driver_profile = driver
+                            session.driver_status = consts.STATUS_DRIVER_OFFLINE
+                            session.save()
+                            response = common_response.CommonResponse(success=True,
+                                                                      data=user_data,
+                                                                      reason='Vehicle Not Selected',
+                                                                      error_code=consts.ERROR_NONE)
+                            return HttpResponse(response.respond(), content_type="application/json")
+                    else:
+                        user_data = {
+                            'session_id': session.session_id,
+                            'user_name': session.user.username,
+                            'user_email': session.user.email,
+                            'user_rating': session.user.average_rating,
+                            'user_phone': session.user.phone,
+                            'user_photo_url': str(session.user.user_picture),
+                            'driver': None,
+                            'vehicle': None
+                        }
+                        session.driver_status = consts.STATUS_DRIVER_OFFLINE
+                        session.save()
+                        response = common_response.CommonResponse(success=True,
+                                                                  data=user_data,
+                                                                  reason='Driver Profile Not Added',
+                                                                  error_code=consts.ERROR_NONE)
+                        return HttpResponse(response.respond(), content_type="application/json")
+                else:
+                    user_data = {
+                        'session_id': session.session_id,
+                        'user_name': session.user.username,
+                        'user_email': session.user.email,
+                        'user_rating': session.user.average_rating,
+                        'user_phone': session.user.phone,
+                        'user_photo_url': str(session.user.user_picture)
+                    }
+                    session.driver_status = consts.STATUS_NOT_DRIVER
+                    session.save()
+                    response = common_response.CommonResponse(success=True,
+                                                              data=user_data,
+                                                              error_code=consts.ERROR_NONE)
+                    return HttpResponse(response.respond(), content_type="application/json")
             else:
                 response = common_response.CommonResponse(success=False,
                                                           reason='Incorrect Phone Number or Password',
@@ -148,3 +233,23 @@ class PinVerification(View):
     @staticmethod
     def post(request):
         phone = request.POST[consts.PARAM_PHONE]
+
+
+class UploadDriverInfo(View):
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+            driver = DriverModel(user=user)
+            driver.save()
+            response = common_response.CommonResponse(success=True,
+                                                      reason='Driver Profile Successfully Added',
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")

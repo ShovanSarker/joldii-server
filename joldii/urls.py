@@ -8,6 +8,7 @@ from joldii.views import GetRideInformation
 from joldii.views import AddPromo
 from joldii.views import RedeemPromo
 from joldii.views import SearchRide
+from joldii.views import UploadDriverInfo
 
 from joldii.views import Users
 from joldii.views import SessionList
@@ -24,6 +25,7 @@ urlpatterns = [
     url(r'^get_ride_info', view=GetRideInformation.as_view(), name="get_ride_info"),
     url(r'^add_promo', view=AddPromo.as_view(), name="add_promo"),
     url(r'^redeem_promo', view=RedeemPromo.as_view(), name="redeem_promo"),
+    url(r'^upload_driver_info', view=UploadDriverInfo.as_view(), name="upload_driver_info"),
 
     url(r'^order_ride', view=SearchRide.as_view(), name="order_ride"),
 
