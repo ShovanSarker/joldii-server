@@ -54,6 +54,9 @@ class SearchRide(View):
                     order_status=consts.STATUS_ORDER_PLACED
                 )
                 new_order.save()
+
+                driver_list = SearchRide.find_driver(request.POST[consts.PARAM_LAT_FROM], request.POST[consts.PARAM_LNG_FROM])
+
                 order_data = {
                     'trip_order_id': new_order.ride_id
                 }
@@ -67,3 +70,22 @@ class SearchRide(View):
                                                       reason='Incorrect Parameters',
                                                       error_code=consts.ERROR_INCORRECT_PARAMETERS)
             return HttpResponse(response.respond(), content_type="application/json")
+
+    @staticmethod
+    def find_driver(lat, lng):
+        rad = 0.0
+        drivers = None
+        while drivers is None:
+            rad += 0.5
+            min_lat = lat - (rad/111)
+            min_lng = lng - (rad / 111)
+
+            max_lat = lat + (rad / 111)
+            max_lng = lng + (rad / 111)
+
+            drivers = SessionModel.objects.filter(driver_status=consts.STATUS_DRIVER_ONLINE, current_lat__gt=min_lat, current_lon__gt=min_lng,
+                                    current_lat__lt=max_lat, current_lon__lt=max_lng)
+
+            print "Radius: %s, Drivers: %s" % (rad, drivers)
+
+        return drivers
