@@ -19,6 +19,7 @@ class VehicleClassModel(BaseModel):
 
 class VehicleModel(BaseModel):
 
+    model = models.TextField(max_length=128)
     registration_number = models.TextField(max_length=128, unique=True)
     engine_number = models.TextField(max_length=128, null=True)
     chassis_number = models.TextField(max_length=128, null=True)
@@ -31,7 +32,7 @@ class VehicleModel(BaseModel):
     average_rating = models.FloatField(default=0)
     number_of_rides = models.IntegerField(default=0)
 
-    driver = models.ManyToManyField(DriverModel, related_name='vehicle_model_driver')
+    driver = models.ForeignKey(DriverModel, related_name='vehicle_model_driver')
 
     class Meta:
         app_label = "joldii"

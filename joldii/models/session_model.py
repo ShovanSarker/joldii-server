@@ -2,7 +2,9 @@ from django.db import models
 
 from joldii.models import BaseModel
 from joldii.models.user_model import UserModel
+from joldii.models.driver_model import DriverModel
 from joldii.models.ride_model import RideModel
+from joldii.models.vehicle_model import VehicleModel
 
 
 from joldii.utils import UUID
@@ -14,8 +16,10 @@ class SessionModel(BaseModel):
     current_lat = models.DecimalField(default=0, max_digits=19, decimal_places=10)
     current_lon = models.DecimalField(default=0, max_digits=19, decimal_places=10)
     current_ride = models.ForeignKey(RideModel, null=True, blank=True, related_name='session_model_current_ride')
+    driver_profile = models.ForeignKey(DriverModel, null=True, blank=True, related_name='session_model_driver_profile')
     is_driver = models.BooleanField(default=False)
     driver_status = models.IntegerField(default=0)
+    current_vehicle = models.ForeignKey(VehicleModel, null=True, blank=True, related_name='session_current_vehicle')
     status = models.BooleanField(default=False)
 
     class Meta:
