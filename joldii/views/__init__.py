@@ -6,6 +6,10 @@ from joldii.views.map import GetRideInformation
 from joldii.views.promo import AddPromo
 from joldii.views.promo import RedeemPromo
 from joldii.views.trip import SearchRide
+from joldii.views.trip import StartTrip
+from joldii.views.trip import EndTrip
+from joldii.views.trip import PartnerPosition
+from joldii.views.trip import ToggleDriverStatus
 from joldii.views.session import UploadDriverInfo
 
 from joldii.views.test import Users
@@ -19,6 +23,10 @@ __all__ = ["Register",
            "AddPromo",
            "RedeemPromo",
            "SearchRide",
+           "StartTrip",
+           "EndTrip",
+           "PartnerPosition",
+           "ToggleDriverStatus",
            "UploadDriverInfo",
 
            "Users",

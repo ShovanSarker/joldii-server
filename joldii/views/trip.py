@@ -17,7 +17,6 @@ class SearchRide(View):
 
     @staticmethod
     def post(request):
-        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -86,6 +85,8 @@ class SearchRide(View):
                     # new_order.vehicle = selected_driver.current_vehicle
                     new_order.order_status = consts.STATUS_ORDER_CONFIRMED
                     new_order.save()
+                    selected_driver.driver_status = consts.STATUS_DRIVER_APPROACHING_PICKUP
+                    selected_driver.save()
                     driver_information = {
                         'driver_name': selected_driver.user.username,
                         'driver_phone': selected_driver.user.phone
@@ -139,7 +140,193 @@ class SearchRide(View):
 
 
 class StartTrip(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+            oid ==> order id
+            lat_from
+            long_from
+    """
 
     @staticmethod
     def post(request):
-        request
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        if SessionModel.objects.filter(session_id=request.POST[consts.PARAM_SESSION_ID],
+                                       driver_status=consts.STATUS_DRIVER_APPROACHING_PICKUP).exisits():
+            try:
+                ride_id = request.POST[consts.PARAM_ORDER_ID]
+                pickup_lat = request.POST[consts.PARAM_LAT_FROM]
+                pickup_lon = request.POST[consts.PARAM_LNG_FROM]
+            except:
+                response = common_response.CommonResponse(success=False,
+                                                          reason='Incorrect Parameters',
+                                                          error_code=consts.ERROR_INCORRECT_PARAMETERS)
+                return HttpResponse(response.respond(), content_type="application/json")
+
+            try:
+                selected_trip = RideModel.objects.get(ride_id=ride_id)
+                selected_trip.pickup_lat = pickup_lat
+                selected_trip.pickup_lon = pickup_lon
+                selected_trip.order_status = consts.STATUS_ORDER_STARTED
+                selected_trip.save()
+                driver_session = SessionModel.objects.get(user=user)
+                driver_session.driver_status = consts.STATUS_DRIVER_IN_RIDE
+                driver_session.save()
+                response = common_response.CommonResponse(success=True,
+                                                          reason='Ride Successfully Started',
+                                                          error_code=consts.ERROR_NONE)
+                return HttpResponse(response.respond(), content_type="application/json")
+            except:
+                response = common_response.CommonResponse(success=False,
+                                                          reason='Incorrect Ride Information',
+                                                          error_code=consts.ERROR_INCORRECT_RIDE_ID)
+                return HttpResponse(response.respond(), content_type="application/json")
+        else:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Driver Can Not Start Ride',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+class EndTrip(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+            oid ==> order id
+            lat_to
+            long_to
+    """
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        if SessionModel.objects.filter(session_id=request.POST[consts.PARAM_SESSION_ID],
+                                       driver_status=consts.STATUS_DRIVER_APPROACHING_PICKUP).exisits():
+            try:
+                ride_id = request.POST[consts.PARAM_ORDER_ID]
+                drop_lat = request.POST[consts.PARAM_LAT_TO]
+                drop_lon = request.POST[consts.PARAM_LNG_TO]
+            except:
+                response = common_response.CommonResponse(success=False,
+                                                          reason='Incorrect Parameters',
+                                                          error_code=consts.ERROR_INCORRECT_PARAMETERS)
+                return HttpResponse(response.respond(), content_type="application/json")
+
+            try:
+                selected_trip = RideModel.objects.get(ride_id=ride_id)
+                selected_trip.drop_lat = drop_lat
+                selected_trip.drop_lon = drop_lon
+                selected_trip.order_status = consts.STATUS_ORDER_COMPLETED
+                selected_trip.save()
+                driver_session = SessionModel.objects.get(user=user)
+                driver_session.driver_status = consts.STATUS_DRIVER_ONLINE
+                driver_session.save()
+                response = common_response.CommonResponse(success=True,
+                                                          reason='Ride Successfully Started',
+                                                          error_code=consts.ERROR_NONE)
+                return HttpResponse(response.respond(), content_type="application/json")
+            except:
+                response = common_response.CommonResponse(success=False,
+                                                          reason='Incorrect Ride Information',
+                                                          error_code=consts.ERROR_INCORRECT_RIDE_ID)
+                return HttpResponse(response.respond(), content_type="application/json")
+        else:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Driver Can Not Start Ride',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+class PartnerPosition(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+            oid ==> order id
+    """
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            oid = request.POST[consts.PARAM_ORDER_ID]
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            this_order = RideModel.objects.get(ride_id=oid)
+            order_driver = SessionModel.objects.get(user=this_order.driver)
+            order_user = SessionModel.objects.get(user=this_order.user)
+            partner_data = {
+                'driver_lat': order_driver.current_lat,
+                'driver_lon': order_driver.current_lon,
+                'user_lat': order_user.current_lat,
+                'user_lon': order_user.current_lon
+            }
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Parameters',
+                                                      data=partner_data,
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Order',
+                                                      error_code=consts.ERROR_INCORRECT_RIDE_ID)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+class ToggleDriverStatus(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+            driver_status = online/offline
+    """
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user_session = SessionModel.objects.get(session_id=sess_id)
+            driver_status = request.POST[consts.PARAM_DRIVER_STATUS]
+            if driver_status == 'online':
+                user_session.driver_status = consts.STATUS_DRIVER_ONLINE
+                user_session.save()
+            if driver_status == 'offline':
+                user_session.driver_status = consts.STATUS_DRIVER_OFFLINE
+                user_session.save()
+
+            response = common_response.CommonResponse(success=True,
+                                                      reason='Status Successfully Updated',
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
