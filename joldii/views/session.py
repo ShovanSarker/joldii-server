@@ -242,7 +242,16 @@ class UploadDriverInfo(View):
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
-            driver = DriverModel(user=user)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            driver = DriverModel(user=user,
+                                 national_id=request.POST[consts.PARAM_DRIVER_LICENSE],
+                                 driving_license=request.POST[consts.PARAM_DRIVER_LICENSE])
+
             driver.save()
             response = common_response.CommonResponse(success=True,
                                                       reason='Driver Profile Successfully Added',
