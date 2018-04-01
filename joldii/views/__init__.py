@@ -10,6 +10,8 @@ from joldii.views.trip import StartTrip
 from joldii.views.trip import EndTrip
 from joldii.views.trip import PartnerPosition
 from joldii.views.trip import ToggleDriverStatus
+from joldii.views.trip import NotifyDriver
+from joldii.views.trip import NotifyUser
 from joldii.views.session import UploadDriverInfo
 
 from joldii.views.test import Users
@@ -28,6 +30,8 @@ __all__ = ["Register",
            "PartnerPosition",
            "ToggleDriverStatus",
            "UploadDriverInfo",
+           "NotifyDriver",
+           "NotifyUser",
 
            "Users",
            "SessionList"

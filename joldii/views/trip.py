@@ -9,6 +9,7 @@ from joldii.constants import consts
 from joldii.models import RideModel
 from joldii.models import SessionModel
 from joldii.models import VehicleClassModel
+from joldii.models import DriverModel
 
 from joldii.responses import common_response
 
@@ -17,6 +18,7 @@ class SearchRide(View):
 
     @staticmethod
     def post(request):
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -280,18 +282,18 @@ class PartnerPosition(View):
             return HttpResponse(response.respond(), content_type="application/json")
         try:
             this_order = RideModel.objects.get(ride_id=oid)
-            order_driver = SessionModel.objects.get(user=this_order.driver)
+            order_driver = SessionModel.objects.get(user=this_order.driver.user)
             order_user = SessionModel.objects.get(user=this_order.user)
             partner_data = {
-                'driver_lat': order_driver.current_lat,
-                'driver_lon': order_driver.current_lon,
-                'user_lat': order_user.current_lat,
-                'user_lon': order_user.current_lon
+                'driver_lat': str(order_driver.current_lat),
+                'driver_lon': str(order_driver.current_lon),
+                'user_lat': str(order_user.current_lat),
+                'user_lon': str(order_user.current_lon)
             }
-            response = common_response.CommonResponse(success=False,
-                                                      reason='Incorrect Parameters',
+            response = common_response.CommonResponse(success=True,
+                                                      reason='Updated Location',
                                                       data=partner_data,
-                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+                                                      error_code=consts.ERROR_NONE)
             return HttpResponse(response.respond(), content_type="application/json")
         except:
             response = common_response.CommonResponse(success=False,
@@ -329,4 +331,91 @@ class ToggleDriverStatus(View):
             response = common_response.CommonResponse(success=False,
                                                       reason='Invalid Session',
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+class NotifyDriver(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+    """
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            driver_profile = DriverModel.objects.get(user=user)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='User Not Driver',
+                                                      error_code=consts.ERROR_USER_NOT_DRIVER)
+            return HttpResponse(response.respond(), content_type="application/json")
+        if RideModel.objects.filter(driver=driver_profile, order_status=consts.STATUS_ORDER_CONFIRMED).exists():
+            current_trip = RideModel.objects.filter(driver=driver_profile,
+                                                    order_status=consts.STATUS_ORDER_CONFIRMED)[0]
+            trip_data = {
+                'ride_id': current_trip.ride_id,
+                'user_name': current_trip.user.username,
+                'user_phone': current_trip.user.phone,
+                'user_rating': current_trip.user.average_rating,
+                'pickup_lat': current_trip.pickup_lat,
+                'pickup_lon': current_trip.pickup_lon,
+                'drop_lat': current_trip.drop_lat,
+                'drop_lon': current_trip.drop_lon
+            }
+            response = common_response.CommonResponse(success=True,
+                                                      reason='New Order',
+                                                      data=trip_data,
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        else:
+            response = common_response.CommonResponse(success=True,
+                                                      reason='No Ride Assigned',
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+class NotifyUser(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+            oid => order id
+    """
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            this_order = RideModel.objects.get(ride_id=request.POST[consts.PARAM_ORDER_ID])
+            order_driver = SessionModel.objects.get(user=this_order.driver.user)
+            trip_data = {
+                'trip_status': this_order.order_status,
+                'driver_lat': str(order_driver.current_lat),
+                'driver_lon': str(order_driver.current_lon)
+            }
+            response = common_response.CommonResponse(success=True,
+                                                      reason='New Order',
+                                                      data=trip_data,
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Order',
+                                                      error_code=consts.ERROR_INCORRECT_RIDE_ID)
             return HttpResponse(response.respond(), content_type="application/json")
