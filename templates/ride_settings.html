@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+
+
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-sm-4">
+                <h2>Ride Settings</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="active">
+                        <a href="{% url 'rides' %}">Ride</a>
+                    </li>
+                    <li class="active">
+                        <strong>Settings</strong>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-sm-8">
+                <div class="title-action">
+                    <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#settingsModal"><i class="fa fa-plus"></i> <span class="bold"></span>Add Settings</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal here -->
+
+        <div class="modal inmodal fade" id="settingsModal" tabindex="-1" role="dialog"  aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title">Ride Settings</h4>
+                        <small class="font-bold">Changes which will made will be applied for all rides upto next change.</small>
+                    </div>
+                    <form>
+                        <div class="modal-body">
+                            <div class="form-group"><label class="col-sm-2 control-label">Base Fare</label>
+                                <div class="col-sm-10"><input type="text" class="form-control"> <span class="help-block m-b-none">Text help</span>
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-2 control-label">Fare / Min</label>
+                                <div class="col-sm-10"><input type="text" class="form-control"> <span class="help-block m-b-none">Text Help</span>
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-2 control-label">Fare / km</label>
+                                <div class="col-sm-10"><input type="text" class="form-control"> <span class="help-block m-b-none">Text Help</span>
+                                </div>
+                            </div>
+                            <div class="form-group"><label class="col-sm-2 control-label">Fare %</label>
+                                <div class="col-sm-10"><input type="text" class="form-control"> <span class="help-block m-b-none">fare percentage based on time intervals</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Ends -->
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInRight">
+
+                    <div class="ibox-content m-b-sm border-bottom">
+                        <div class="text-center p-lg">
+                            <h2>Settings Images</h2>
+                            <span> All the settings were made and change earlier is listed as images here</span>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <a data-toggle="collapse" href="#faq1" class="faq-question">Ride Title 01</a>
+                                <small>Added by <strong>Admin 1</strong> <i class="fa fa-clock-o"></i> Today 2:40 pm - 24.06.2014</small>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="small font-bold">Type</span>
+                                <div class="tag-list">
+                                    <span class="tag-item">General</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <span class="small font-bold">Key </span><br/>
+                                42
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="faq1" class="panel-collapse collapse ">
+                                    <div class="faq-answer">
+                                        <p>
+                                            Base Fare: 32.0 tk</br>
+                                            Fare / Min: 12.0 tk</br>
+                                            Fare / km: 02.0 tk</br>
+                                            Fare Percentage: 22.0 tk</br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <a data-toggle="collapse" href="#faq2" class="faq-question">Ride Title 02</a>
+                                <small>Added by <strong>Admin 1</strong> <i class="fa fa-clock-o"></i> Today 2:40 pm - 24.06.2014</small>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="small font-bold">Type</span>
+                                <div class="tag-list">
+                                    <span class="tag-item">General</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <span class="small font-bold">Key </span><br/>
+                                42
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="faq2" class="panel-collapse collapse ">
+                                    <div class="faq-answer">
+                                        <p>
+                                            Base Fare: 32.0 tk</br>
+                                            Fare / Min: 12.0 tk</br>
+                                            Fare / km: 02.0 tk</br>
+                                            Fare Percentage: 22.0 tk</br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="row">
+                            <div class="col-md-7">
+                                <a data-toggle="collapse" href="#faq3" class="faq-question">Ride Title 03</a>
+                                <small>Added by <strong>Admin 1</strong> <i class="fa fa-clock-o"></i> Today 2:40 pm - 24.06.2014</small>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="small font-bold">Type</span>
+                                <div class="tag-list">
+                                    <span class="tag-item">General</span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-right">
+                                <span class="small font-bold">Key </span><br/>
+                                42
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="faq3" class="panel-collapse collapse ">
+                                    <div class="faq-answer">
+                                        <p>
+                                            Base Fare: 32.0 tk</br>
+                                            Fare / Min: 12.0 tk</br>
+                                            Fare / km: 02.0 tk</br>
+                                            Fare Percentage: 22.0 tk</br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+{% endblock %}

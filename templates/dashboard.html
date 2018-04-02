@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>Joldi Dashboard</h2>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <strong>Dashboard</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div>
+                                <span class="pull-right text-right">
+                                    <small>Average Ride generates per month </small>
+                                    <br/>
+                                    6666
+                                </span>
+                            <h3 class="font-bold no-margins">
+                                Half-year Ride Generation
+                            </h3>
+                            <small>Sales marketing.</small>
+                        </div>
+
+                        <div>
+                            <canvas id="lineChart" height="70"></canvas>
+                        </div>
+
+                        <div class="m-t-md">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i>
+                                Update on 16.07.2017
+                            </small>
+                            <small>
+                                <strong>Analysis of Success:</strong> Ride generation and success of rides is increasing by 3% per month
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>Rides</h5>
+                        <div class="pull-right">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-xs btn-white active">Today</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="flot-chart">
+                            <div class="flot-chart-content" id="flot-dashboard-chart"></div>
+                        </div>
+
+                        <div class="m-t-md">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i>
+                                Update on 16.07.2017
+                            </small>
+                            <small>
+                                <strong>Update :</strong> 6%
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-lg-8">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>Activity among all riders</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <p>
+                            All riders and drivers are pointed in their corresponding location in map.
+                        </p>
+                        <div class="joldi-map" id="map2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <div>
+                                        <span class="pull-right text-right">
+                                        <small>Status includes ride generation, success and declined </small>
+                                            <br/>
+                                            All sales: 162,862
+                                        </span>
+                            <h1>Weekly</h1>
+                            <h3 class="font-bold no-margins">
+                                Ride Status
+                            </h3>
+                        </div>
+
+                        <div id="morris-donut-chart" ></div>
+
+                        <div class="m-t-md">
+                            <small class="pull-right">
+                                <i class="fa fa-clock-o"> </i>
+                                Update on 16.07.2017
+                            </small>
+                            <small>
+                                <strong>Analysis :</strong> 20 Ride generated, 13 Success, 7 failed
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+
+

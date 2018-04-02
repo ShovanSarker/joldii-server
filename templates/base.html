@@ -1,10 +1,412 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Joldi Dashboard</title>
+
+    {% load staticfiles %}
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/font-awesome/css/font-awesome.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+
+    <!-- Data Tables -->
+    <link href="{% static 'css/plugins/dataTables/dataTables.bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/dataTables/dataTables.responsive.css' %}" rel="stylesheet">
+    <link href="{% static 'css/plugins/dataTables/dataTables.tableTools.min.css' %}" rel="stylesheet">
+
+    <!-- date range picker css -->
+    <link rel="stylesheet" href="{% static 'assets/css/plugins/daterangepicker/daterangepicker-bs3.css' %}">
+
+
+
 </head>
-<body>
+
+<body class="">
+<div id="wrapper">
+    {% include 'base_nav.html' %}
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top  " role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                </div>
+                <ul class="nav navbar-top-links navbar-right">
+                    <li>
+                        <span class="m-r-sm text-muted welcome-message">Welcome</span>
+                    </li>
+                    <li>
+                        <a href="login.html">
+                            <i class="fa fa-sign-out"></i> Log out
+                        </a>
+                    </li>
+                </ul>
+
+            </nav>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+
+        {% include 'base_footer.html' %}
+
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+<script src="{% static 'assets/js/jquery-2.1.1.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/metisMenu/jquery.metisMenu.js' %}"></script>
+<script src="{% static 'assets/js/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+<!-- Custom and plugin javascript -->
+<script src="{% static 'assets/js/inspinia.js' %}"></script>
+<script src="{% static 'assets/js/plugins/pace/pace.min.js' %}"></script>
+
+<!-- Data Tables -->
+<script src="{% static 'assets/js/plugins/dataTables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'assets/js/plugins/dataTables/dataTables.bootstrap.js' %}"></script>
+<script src="{% static 'assets/js/plugins/dataTables/dataTables.responsive.js' %}"></script>
+<script src="{% static 'assets/js/plugins/dataTables/dataTables.tableTools.min.js' %}"></script>
+
+<!-- ChartJS-->
+<script src="{% static 'assets/js/plugins/chartJs/Chart.min.js' %}"></script>
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCACJ7upFufBfb3E_hRf36gMygfVvqg1Vo"></script>
+<!-- Flot -->
+<script src="{% static 'assets/js/plugins/flot/jquery.flot.js' %}"></script>
+<script src="{% static 'assets/js/plugins/flot/jquery.flot.tooltip.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/flot/jquery.flot.spline.js' %}"></script>
+<script src="{% static 'assets/js/plugins/flot/jquery.flot.resize.js' %}"></script>
+<script src="{% static 'assets/js/plugins/flot/jquery.flot.pie.js' %}"></script>
+<script src="{% static 'assets/js/plugins/flot/jquery.flot.symbol.js' %}"></script>
+<script src="{% static 'assets/js/plugins/flot/jquery.flot.time.js' %}"></script>
+
+<!-- Morris -->
+<script src="{% static 'assets/js/plugins/morris/raphael-2.1.0.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/morris/morris.js' %}"></script>
+
+<!-- Date range use moment.js same as full calendar plugin -->
+<script src="{% static 'assets/js/plugins/fullcalendar/moment.min.js' %}"></script>
+<script src="{% static 'assets/js/plugins/daterangepicker/daterangepicker.js' %}"></script>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#vehicleTable').DataTable({
+            "dom": 'gftp',
+            "tableTools": {
+                "sSwfPath": "{% static 'asselts/js/plugins/dataTables/swf/copy_csv_xls_pdf.swf' %}"
+            }
+        });
+
+        $('input[name="daterange"]').daterangepicker();
+
+        // linedata for half year ride generation
+        var lineData = {
+            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            datasets: [
+                {
+                    label: "Example dataset",
+                    fillColor: "rgba(220,220,220,0.5)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: [65, 59, 80, 81, 56, 55, 40]
+                },
+                {
+                    label: "Example dataset",
+                    fillColor: "rgba(26,179,148,0.5)",
+                    strokeColor: "rgba(26,179,148,0.7)",
+                    pointColor: "rgba(26,179,148,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(26,179,148,1)",
+                    data: [28, 48, 40, 19, 86, 27, 90]
+                }
+            ]
+        };
+
+
+        // GOOGLE MAP CODE
+        // When the window has finished loading google map
+        google.maps.event.addDomListener(window, 'load', init);
+
+        function init() {
+            // Options for Google map
+            // More info see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
+
+            var mapTheme = {
+                zoom: 8,
+                center: new google.maps.LatLng(40.5600, -73.8400),
+                // Style for Google Maps
+                styles: [{"stylers":[{"hue":"#18a689"},{"visibility":"on"},{"invert_lightness":true},{"saturation":40},{"lightness":10}]}]
+            };
+
+            // Get all html elements for map
+            var mapMount = document.getElementById('map2');
+
+            // Create the Google Map using elements
+            var map = new google.maps.Map(mapMount, mapTheme);
+
+            setMarkers(map);
+        }
+
+        // Data for pointers
+        var pointers = [
+            ['Point 1', 41.3765, -72.7515],
+            ['Point 2', 40.5722, -73.9107],
+            ['Point 3', 40.8723, -72.4857]
+        ];
+
+        var pointers2 = [
+            {
+                title: 'Point 1',
+                lat: 41.3765,
+                lng: -72.7515,
+                type: 'rider_male'
+            },
+            {
+                title: 'Point 2',
+                lat: 41.3265,
+                lng: -72.3315,
+                type: 'rider_female'
+            },
+            {
+                title: 'Point 3',
+                lat: 40.5722,
+                lng: -73.9107,
+                type: 'driver_cab'
+            },
+            {
+                title: 'Point 4',
+                lat: 40.4822,
+                lng: -73.7607,
+                type: 'driver_bike'
+            },
+            {
+                title: 'Point 5',
+                lat: 40.8723,
+                lng: -72.4857,
+                type: 'rider'
+            },
+            {
+                title: 'Point 6',
+                lat: 40.6723,
+                lng: -72.9857,
+                type: 'driver'
+            }
+        ];
+
+        // Marker adding function to the map
+        function setMarkers(map){
+            // image properties
+            var image = {
+                url: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
+                size: new google.maps.Size(20, 32),
+                origin: new google.maps.Point(0, 0),
+                anchor: new google.maps.Point(0, 32)
+            };
+
+            var icons={
+                rider: {
+                    icon: "{% static 'assets/img/map/rider.png' %}"
+                },
+                driver: {
+                    icon: "{% static 'assets/img/map/driver.png' %}"
+                },
+                rider_male: {
+                    icon: "{% static 'assets/img/map/colored/male.png' %}"
+                },
+                rider_female: {
+                    icon: "{% static 'assets/img/map/colored/female.png' %}"
+                },
+                driver_cab: {
+                    icon: "{% static 'assets/img/map/colored/car.png' %}"
+                },
+                driver_bike: {
+                    icon: "{% static 'assets/img/map/colored/bike.png' %}"
+                }
+            };
+
+            // shape settings
+            var shape = {
+                coords: [1, 1, 1, 20, 18, 20, 18, 1],
+                type: 'poly'
+            };
+
+            // json data calculation
+            pointers2.forEach(function(point){
+                var marker = new google.maps.Marker({
+                    position: {lat: point.lat, lng: point.lng},
+                    icon: icons[point.type].icon,
+                    map: map,
+                    title: point.title,
+                    animation: google.maps.Animation.DROP
+                });
+            });
+        }
+
+        // GOOGLE MAP CODE ENDS
+
+        var lineOptions = {
+            scaleShowGridLines: true,
+            scaleGridLineColor: "rgba(0,0,0,.05)",
+            scaleGridLineWidth: 1,
+            bezierCurve: true,
+            bezierCurveTension: 0.4,
+            pointDot: true,
+            pointDotRadius: 4,
+            pointDotStrokeWidth: 1,
+            pointHitDetectionRadius: 20,
+            datasetStroke: true,
+            datasetStrokeWidth: 2,
+            datasetFill: true,
+            responsive: true,
+        };
+
+        var ctx = document.getElementById("lineChart").getContext("2d");
+        var myNewChart = new Chart(ctx).Line(lineData, lineOptions);
+
+
+
+        // flot chart
+        var data2 = [
+            [gd(2012, 1, 1), 7], [gd(2012, 1, 2), 6], [gd(2012, 1, 3), 4], [gd(2012, 1, 4), 8],
+            [gd(2012, 1, 5), 9], [gd(2012, 1, 6), 7], [gd(2012, 1, 7), 5], [gd(2012, 1, 8), 4],
+            [gd(2012, 1, 9), 7], [gd(2012, 1, 10), 8], [gd(2012, 1, 11), 9], [gd(2012, 1, 12), 6],
+            [gd(2012, 1, 13), 4], [gd(2012, 1, 14), 5], [gd(2012, 1, 15), 11], [gd(2012, 1, 16), 8],
+            [gd(2012, 1, 17), 8], [gd(2012, 1, 18), 11], [gd(2012, 1, 19), 11], [gd(2012, 1, 20), 6],
+            [gd(2012, 1, 21), 6], [gd(2012, 1, 22), 8], [gd(2012, 1, 23), 11], [gd(2012, 1, 24), 13],
+            [gd(2012, 1, 25), 7], [gd(2012, 1, 26), 9], [gd(2012, 1, 27), 9], [gd(2012, 1, 28), 8],
+            [gd(2012, 1, 29), 5], [gd(2012, 1, 30), 8], [gd(2012, 1, 31), 25]
+        ];
+
+        var data3 = [
+            [gd(2012, 1, 1), 800], [gd(2012, 1, 2), 500], [gd(2012, 1, 3), 600], [gd(2012, 1, 4), 700],
+            [gd(2012, 1, 5), 500], [gd(2012, 1, 6), 456], [gd(2012, 1, 7), 800], [gd(2012, 1, 8), 589],
+            [gd(2012, 1, 9), 467], [gd(2012, 1, 10), 876], [gd(2012, 1, 11), 689], [gd(2012, 1, 12), 700],
+            [gd(2012, 1, 13), 500], [gd(2012, 1, 14), 600], [gd(2012, 1, 15), 700], [gd(2012, 1, 16), 786],
+            [gd(2012, 1, 17), 345], [gd(2012, 1, 18), 888], [gd(2012, 1, 19), 888], [gd(2012, 1, 20), 888],
+            [gd(2012, 1, 21), 987], [gd(2012, 1, 22), 444], [gd(2012, 1, 23), 999], [gd(2012, 1, 24), 567],
+            [gd(2012, 1, 25), 786], [gd(2012, 1, 26), 666], [gd(2012, 1, 27), 888], [gd(2012, 1, 28), 900],
+            [gd(2012, 1, 29), 178], [gd(2012, 1, 30), 555], [gd(2012, 1, 31), 993]
+        ];
+
+
+        var dataset = [
+            {
+                label: "Number of Rides",
+                data: data3,
+                color: "#1ab394",
+                bars: {
+                    show: true,
+                    align: "center",
+                    barWidth: 24 * 60 * 60 * 600,
+                    lineWidth:0
+                }
+
+            }, {
+                label: "Sucess",
+                data: data2,
+                yaxis: 2,
+                color: "#1C84C6",
+                lines: {
+                    lineWidth:1,
+                    show: true,
+                    fill: true,
+                    fillColor: {
+                        colors: [{
+                            opacity: 0.2
+                        }, {
+                            opacity: 0.4
+                        }]
+                    }
+                },
+                splines: {
+                    show: false,
+                    tension: 0.6,
+                    lineWidth: 1,
+                    fill: 0.1
+                },
+            }
+        ];
+
+
+        var options = {
+            xaxis: {
+                mode: "time",
+                tickSize: [3, "day"],
+                tickLength: 0,
+                axisLabel: "Date",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Arial',
+                axisLabelPadding: 10,
+                color: "#d5d5d5"
+            },
+            yaxes: [{
+                position: "left",
+                max: 1070,
+                color: "#d5d5d5",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: 'Arial',
+                axisLabelPadding: 3
+            }, {
+                position: "right",
+                clolor: "#d5d5d5",
+                axisLabelUseCanvas: true,
+                axisLabelFontSizePixels: 12,
+                axisLabelFontFamily: ' Arial',
+                axisLabelPadding: 67
+            }
+            ],
+            legend: {
+                noColumns: 1,
+                labelBoxBorderColor: "#000000",
+                position: "nw"
+            },
+            grid: {
+                hoverable: false,
+                borderWidth: 0
+            }
+        };
+
+        function gd(year, month, day) {
+            return new Date(year, month - 1, day).getTime();
+        }
+
+        var previousPoint = null, previousLabel = null;
+
+        $.plot($("#flot-dashboard-chart"), dataset, options);
+
+
+        // Donut chart
+        Morris.Donut({
+            element: 'morris-donut-chart',
+            data: [{ label: "Declined", value: 10 },
+                { label: "Generation", value: 30 },
+                { label: "Success", value: 20 } ],
+            resize: true,
+            colors: ['#87d6c6', '#54cdb4','#1ab394'],
+        });
+
+
+
+
+
+    })
+</script>
+
 
 </body>
+
+
+<!-- Mirrored from webapplayers.com/inspinia_admin-v2.3/empty_page.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 01 Sep 2015 13:14:14 GMT -->
 </html>
