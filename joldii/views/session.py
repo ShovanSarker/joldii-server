@@ -9,6 +9,7 @@ from joldii.models import DriverModel
 from joldii.models import UserModel
 from joldii.models import SessionModel
 from joldii.models import VehicleModel
+from joldii.models import VehicleClassModel
 
 from joldii.responses import response_login
 from joldii.responses import response_register
@@ -61,7 +62,7 @@ class Login(View):
                             for one_vehicle in all_vehicles:
                                 vehicle_data = {
                                     'registration_number': one_vehicle.registration_number,
-                                    'vehicle_type': one_vehicle.ride_class,
+                                    'vehicle_type': one_vehicle.ride_class.name,
                                     'vehicle_type_id': one_vehicle.ride_class.pk,
                                     'vehicle_color': one_vehicle.color
                                 }
@@ -262,3 +263,54 @@ class UploadDriverInfo(View):
                                                       reason='Invalid Session',
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
             return HttpResponse(response.respond(), content_type="application/json")
+
+
+class UploadVehicleInfo(View):
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            driver = DriverModel.objects.get(user=user)
+            vehicle_class = VehicleClassModel.objects.get(pk=request.POST[consts.PARAM_VEHICLE_TYPE_ID])
+            new_vehicle = VehicleModel(registration_number=request.POST[consts.PARAM_VEHICLE_NUMBER],
+                                       color=request.POST[consts.PARAM_VEHICLE_COLOR],
+                                       model=request.POST[consts.PARAM_VEHICLE_NAME],
+                                       ride_class=vehicle_class,
+                                       driver=driver)
+            new_vehicle.save()
+            response = common_response.CommonResponse(success=True,
+                                                      reason='Vehicle Successfully Added',
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+class GetVehicleInfo(View):
+
+    @staticmethod
+    def post(request):
+        all_vehicle_type = VehicleClassModel.objects.all()
+        all_vehicle_type_array = []
+        for one_vehicle_type in all_vehicle_type:
+            one_vehicle = {
+                'vehicle_type': one_vehicle_type.name,
+                'vehicle_type_id': one_vehicle_type.pk
+            }
+            all_vehicle_type_array.append(one_vehicle)
+        response = common_response.CommonResponse(success=True,
+                                                  data=all_vehicle_type_array,
+                                                  reason='All Vehicle Type List',
+                                                  error_code=consts.ERROR_NONE)
+        return HttpResponse(response.respond(), content_type="application/json")
