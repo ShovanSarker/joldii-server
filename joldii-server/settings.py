@@ -30,7 +30,7 @@ SECRET_KEY = '_dejk&oxu2617bl@7lqkb*ki2@&d&&-4^_bgx@hyv677x6h*m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.20.6", "192.168.20.11", "10.0.2.2"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.20.6", "192.168.20.10", "10.0.2.2", "core.chandergari.com"]
 
 # Application definition
 
@@ -68,6 +68,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+        },
+        'TEMPLATE_DIRS': {
+            os.path.join(BASE_DIR, 'templates'),
         },
     },
 ]
@@ -124,9 +127,9 @@ STATICFILES_DIRS = (
     STATIC_PATH,
 )
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
-)
+# TEMPLATE_DIRS = (
+#     os.path.join(BASE_DIR, 'templates'),
+# )
 
 
 MEDIA_URL = '/media/'

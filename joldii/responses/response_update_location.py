@@ -2,14 +2,14 @@ from base_response import Response
 from ..constants import consts
 
 
-class ChangeEmailResponse(Response):
+class UpdateLocationResponse(Response):
     """
-    Response object for pin_verification requests
+    Response object for forget_password requests
     """
 
-    def __init__(self, state=False):
-        self.set_response(consts.PARAM_ACTION, consts.ACTION_CHANGE_EMAIL)
-        self.parse_response(pin)
+    def __init__(self):
+        self.status = Response.STATE_FAIL
+        self.response = {}
 
     def parse_response(self, state):
         if state is True:

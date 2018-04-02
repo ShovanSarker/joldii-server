@@ -9,14 +9,18 @@ from base_model import BaseModel
 
 
 class UserModel(BaseModel):
-    username = models.CharField(max_length=128, null=False)
+    username = models.CharField(max_length=128)
     email = models.CharField(max_length=128, null=True)
     phone = models.CharField(max_length=32, null=True, unique=True)
     password = models.CharField(max_length=128, null=False)
     address = models.CharField(max_length=256, null=True)
     user_type = models.IntegerField(default=0, null=False)
     is_active = models.BooleanField(default=False)
-    user_picture = models.CharField(max_length=128, null=True)
+    user_picture = models.FileField(upload_to='profile/', null=True)
+    average_rating = models.FloatField(default=0)
+    number_of_rides = models.IntegerField(default=0)
+    pin = models.CharField(max_length=4, default='1234')
+    pin_verified = models.BooleanField(default=False)
 
     class Meta:
         app_label = "joldii"
@@ -25,16 +29,6 @@ class UserModel(BaseModel):
     def save(self, *args, **kwargs):
         super(UserModel, self).save(*args, **kwargs)
 
-    def get_session(self):
-        from joldii.models import SessionModel
-        try:
-            session = SessionModel.objects.get(user=self)
-            return session.session_id
-        except SessionModel.DoesNotExist:
-            session = SessionModel()
-            session.user = self
-            session.save()
-            return session.session_id
 
     @staticmethod
     def create_random_password(size=5, chars=string.ascii_uppercase + string.digits):
@@ -76,3 +70,4 @@ class UserModel(BaseModel):
                 return user
         except UserModel.DoesNotExist:
             return None
+
