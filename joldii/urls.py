@@ -24,8 +24,10 @@ from joldii.views import EndTrip
 from joldii.views import PartnerPosition
 from joldii.views import ToggleDriverStatus
 from joldii.views import UploadDriverInfo
+from joldii.views import UploadVehicleInfo
 from joldii.views import NotifyDriver
 from joldii.views import NotifyUser
+from joldii.views import GetVehicleInfo
 
 from joldii.views import Users
 from joldii.views import SessionList
@@ -55,8 +57,10 @@ urlpatterns = [
     url(r'^add_promo', view=AddPromo.as_view(), name="add_promo"),
     url(r'^redeem_promo', view=RedeemPromo.as_view(), name="redeem_promo"),
     url(r'^upload_driver_info', view=UploadDriverInfo.as_view(), name="upload_driver_info"),
+    url(r'^upload_vehicle_info', view=UploadVehicleInfo.as_view(), name="upload_vehicle_info"),
     url(r'^notify_driver', view=NotifyDriver.as_view(), name="notify_driver"),
     url(r'^notify_user', view=NotifyUser.as_view(), name="notify_user"),
+    url(r'^get_vehicle_info', view=GetVehicleInfo.as_view(), name="get_vehicle_info"),
 
     url(r'^order_ride', view=SearchRide.as_view(), name="order_ride"),
     url(r'^start_ride', view=StartTrip.as_view(), name="start_ride"),

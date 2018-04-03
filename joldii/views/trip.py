@@ -352,6 +352,18 @@ class NotifyDriver(View):
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
             return HttpResponse(response.respond(), content_type="application/json")
         try:
+            curr_lat = request.POST[consts.PARAM_LATITUDE]
+            curr_lng = request.POST[consts.PARAM_LONGITUDE]
+            sess = SessionModel.get_session_by_id(sess_id)
+            sess.current_lat = curr_lat
+            sess.current_lon = curr_lng
+            sess.save()
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
             driver_profile = DriverModel.objects.get(user=user)
         except:
             response = common_response.CommonResponse(success=False,
@@ -366,10 +378,10 @@ class NotifyDriver(View):
                 'user_name': current_trip.user.username,
                 'user_phone': current_trip.user.phone,
                 'user_rating': current_trip.user.average_rating,
-                'pickup_lat': current_trip.pickup_lat,
-                'pickup_lon': current_trip.pickup_lon,
-                'drop_lat': current_trip.drop_lat,
-                'drop_lon': current_trip.drop_lon
+                'pickup_lat': str(current_trip.pickup_lat),
+                'pickup_lon': str(current_trip.pickup_lon),
+                'drop_lat': str(current_trip.drop_lat),
+                'drop_lon': str(current_trip.drop_lon)
             }
             response = common_response.CommonResponse(success=True,
                                                       reason='New Order',
@@ -379,7 +391,7 @@ class NotifyDriver(View):
         else:
             response = common_response.CommonResponse(success=True,
                                                       reason='No Ride Assigned',
-                                                      error_code=consts.ERROR_NONE)
+                                                      error_code=consts.ERROR_UNKNOWN)
             return HttpResponse(response.respond(), content_type="application/json")
 
 
