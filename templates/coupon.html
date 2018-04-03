@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content %}
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>Promo Codes</h2>
+            <ol class="breadcrumb">
+                <li>
+                    <a href="{% url 'dashboard' %}">Dashboard</a>
+                </li>
+                <li class="active">
+                    <strong>Promo Codes</strong>
+                </li>
+            </ol>
+        </div>
+        <div class="col-sm-8">
+            <div class="title-action">
+                <a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#settingsModal"><i class="fa fa-plus"></i> <span class="bold"></span>New Coupon</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal here -->
+
+    <div class="modal inmodal fade" id="settingsModal" tabindex="-1" role="dialog"  aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Coupon Preferences</h4>
+                    <small class="font-bold">Can be re-usable</small>
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <div class="form-group"><label class="col-sm-2 control-label">Title</label>
+                            <div class="col-sm-10"><input type="text" class="form-control"> <span class="help-block m-b-none">Text help</span>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Discount Amount</label>
+                            <div class="col-sm-10"><input type="text" class="form-control"> <span class="help-block m-b-none">Text Help</span>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">In Percentage</label>
+                            <div class="col-sm-10"><input type="text" class="form-control"> <span class="help-block m-b-none">Text Help</span>
+                            </div>
+                        </div>
+                        <div class="form-group"><label class="col-sm-2 control-label">Time</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" type="text" name="daterange" value="01/01/2015 - 01/31/2015" />
+                                <span class="help-block m-b-none">Start time to End time</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ends -->
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="wrapper wrapper-content animated fadeInRight">
+
+                <div class="ibox-content m-b-sm border-bottom">
+                    <div class="text-center p-lg">
+                        <h2>Coupon Images</h2>
+                        <span> Existing All Coupons </span>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="#faq1" class="faq-question">Coupon Code: JO5454</a>
+                            <small>Added by <strong>Admin01</strong> Created at <i class="fa fa-clock-o"></i>  2:40 pm - 04.03.2018</small>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="small font-bold">City</span>
+                            <div class="tag-list">
+                                <span class="tag-item">Dhaka</span>
+                                <span class="tag-item">Chittagong</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">Users </span><br/>
+                            60
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="faq1" class="panel-collapse collapse ">
+                                <div class="faq-answer">
+                                    <p>
+                                        Title : <strong>JO5454</strong><br/>
+                                        Discount Amount: <strong>60.0 tk</strong><br/>
+                                        Percentage: <strong>15.0 %</strong><br/>
+                                        Duration: <strong>07/03/2018 - 28/03/2018</strong><br/>
+                                        Status: <span class="label label-primary">Active</span>
+                                    </p>
+                                    <a href="#" class="btn btn-disabled btn-sm"><i class="fa fa-times"></i> De-Activate </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="#faq2" class="faq-question">Coupon Code: JO1494</a>
+                            <small>Added by <strong>Admin01</strong> Created at <i class="fa fa-clock-o"></i>  2:40 pm - 07.01.2018</small>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="small font-bold">City</span>
+                            <div class="tag-list">
+                                <span class="tag-item">Dhaka</span>
+                                <span class="tag-item">Barisal</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">Users </span><br/>
+                            68
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="faq2" class="panel-collapse collapse ">
+                                <div class="faq-answer">
+                                    <p>
+                                        Title : <strong>JO1494</strong><br/>
+                                        Discount Amount: <strong>57.0 tk</strong><br/>
+                                        Percentage: <strong>12.3 %</strong><br/>
+                                        Duration: <strong>08/01/2018 - 22/01/2018</strong><br/>
+                                        Status: <span class="label label-warning">Done</span>
+                                    </p>
+                                    <a href="#" class="btn btn-disabled btn-sm"><i class="fa fa-check"></i> Activate </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="#faq3" class="faq-question">Coupon Code: JO5154</a>
+                            <small>Added by <strong>Admin01</strong> Created at <i class="fa fa-clock-o"></i>  2:40 pm - 04.03.2018</small>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="small font-bold">City</span>
+                            <div class="tag-list">
+                                <span class="tag-item">Chittagong</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">Users </span><br/>
+                            60
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="faq3" class="panel-collapse collapse ">
+                                <div class="faq-answer">
+                                    <p>
+                                        Title : <strong>JO5154</strong><br/>
+                                        Discount Amount: <strong>60.0 tk</strong><br/>
+                                        Percentage: <strong>15.0 %</strong><br/>
+                                        Duration: <strong>07/03/2018 - 28/03/2018</strong><br/>
+                                        Status: <span class="label label-primary">Active</span>
+                                    </p>
+                                    <a href="#" class="btn btn-disabled btn-sm"><i class="fa fa-times"></i> De-Activate </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <a data-toggle="collapse" href="#faq4" class="faq-question">Coupon Code: JO1004</a>
+                            <small>Added by <strong>Admin01</strong> Created at <i class="fa fa-clock-o"></i>  2:40 pm - 07.01.2018</small>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="small font-bold">City</span>
+                            <div class="tag-list">
+                                <span class="tag-item">Rajshahi</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 text-right">
+                            <span class="small font-bold">Users </span><br/>
+                            68
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div id="faq4" class="panel-collapse collapse ">
+                                <div class="faq-answer">
+                                    <p>
+                                        Title : <strong>JO1004</strong><br/>
+                                        Discount Amount: <strong>57.0 tk</strong><br/>
+                                        Percentage: <strong>12.3 %</strong><br/>
+                                        Duration: <strong>08/01/2018 - 22/01/2018</strong><br/>
+                                        Status: <span class="label label-warning">Done</span>
+                                    </p>
+                                    <a href="#" class="btn btn-disabled btn-sm"><i class="fa fa-check"></i> Activate </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

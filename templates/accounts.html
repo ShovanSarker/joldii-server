@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-sm-4">
+            <h2>Accounts Directory</h2>
+            <ol class="breadcrumb">
+                <li class="active">
+                    <strong>Accounts</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="wrapper wrapper-content animated fadeInUp">
+
+        <div class="ibox">
+            <div class="ibox-title">
+                <h5>All Cash Transaction is given in tabular format given the drivers Activity</h5>
+            </div>
+            <div class="ibox-content">
+
+                <div class="row m-t-lg">
+                    <div class="col-lg-12">
+                        <div class="tabs-container">
+                            <div class="tabs-left">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#driver"><i class="fa fa-motorcycle"></i>Drivers Daily Ride</a></li>
+                                    <li class=""><a data-toggle="tab" href="#monthly"><i class="fa fa-calendar"></i>Monthly total</a></li>
+                                    <li class=""><a data-toggle="tab" href="#car"><i class="fa fa-cab"></i>Car Maintance</a></li>
+                                    <li class=""><a data-toggle="tab" href="#misc"><i class="fa fa-road"></i>Miscelenious</a></li>
+                                </ul>
+                                <div class="tab-content ">
+                                    <div id="driver" class="tab-pane active">
+                                        <div class="panel-body">
+                                            <h3>Riders Income</h3>
+                                            <div class="project-list">
+
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <td><strong>Ride ID</strong></td>
+                                                        <td><strong>Date</strong></td>
+                                                        <td><strong>Distance</strong></td>
+                                                        <td><strong>Driver Name</strong></td>
+                                                        <td><strong>Total Income</strong></td>
+                                                        <td><strong>Driver Taken</strong></td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="label label-primary">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="label label-primary">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="label label-warning">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="monthly" class="tab-pane">
+                                        <div class="panel-body">
+                                            <h3>Riders Income</h3>
+                                            <div class="project-list">
+
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <td><strong>Ride ID</strong></td>
+                                                        <td><strong>Date</strong></td>
+                                                        <td><strong>Distance</strong></td>
+                                                        <td><strong>Driver Name</strong></td>
+                                                        <td><strong>Total Income</strong></td>
+                                                        <td><strong>Driver Taken</strong></td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="label label-primary">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="label label-danger">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="car" class="tab-pane">
+                                        <div class="panel-body">
+                                            <h3>Riders Income</h3>
+                                            <div class="project-list">
+
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <td><strong>Ride ID</strong></td>
+                                                        <td><strong>Date</strong></td>
+                                                        <td><strong>Distance</strong></td>
+                                                        <td><strong>Driver Name</strong></td>
+                                                        <td><strong>Total Income</strong></td>
+                                                        <td><strong>Driver Taken</strong></td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <tr>
+                                                        <td>
+                                                            <span class="label label-default">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                        <td>
+                                                            <span class="label label-primary">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="label label-primary">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="misc" class="tab-pane">
+                                        <div class="panel-body">
+                                            <h3>Riders Income</h3>
+                                            <div class="project-list">
+
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                    <tr>
+                                                        <td><strong>Ride ID</strong></td>
+                                                        <td><strong>Date</strong></td>
+                                                        <td><strong>Distance</strong></td>
+                                                        <td><strong>Driver Name</strong></td>
+                                                        <td><strong>Total Income</strong></td>
+                                                        <td><strong>Driver Taken</strong></td>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <tr>
+                                                        <td>
+                                                            <span class="label label-danger">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                        <td>
+                                                            <span class="label label-primary">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <span class="label label-primary">Ride - From Gulshan To Uttara</span>
+                                                        </td>
+                                                        <td>
+                                                            3.00 pm 24/06/2018
+                                                        </td>
+                                                        <td>
+                                                            3.0 KM
+                                                        </td>
+                                                        <td>
+                                                            Kashem
+                                                        </td>
+                                                        <td>
+                                                            174.0 tk
+                                                        </td>
+                                                        <td>155.0 tk</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

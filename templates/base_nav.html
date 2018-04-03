@@ -1,0 +1,99 @@
+{% load staticfiles %}
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                        <span>
+                            <img alt="image" class="img-circle" src="{% static 'assets/img/Joldii.jpg' %}" />
+                        </span>
+                        <span class="clear">
+                            <strong class="font-bold">Joldii Admin</strong>
+                        </span>
+
+                </div>
+                <div class="logo-element">
+                    JO+
+                </div>
+            </li>
+            {% if page_dashboard %}
+                <li class="active">
+                    <a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> <span class="nav-label active">Dashboard</span></a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i> <span class="nav-label active">Dashboard</span></a>
+                </li>
+            {% endif %}
+
+            {% if page_users %}
+                <li class="active">
+                    <a href="{% url 'users' %}"><i class="fa fa-user"></i> <span class="nav-label active">Users</span></a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'users' %}"><i class="fa fa-user"></i> <span class="nav-label active">Users</span></a>
+                </li>
+            {% endif %}
+
+            {% if page_rides %}
+                <li class="active">
+                    <a href="{% url 'rides' %}"><i class="fa fa-motorcycle"></i> <span class="nav-label active">Rides</span></a>
+                </li>
+            {% elif page_detail %}
+                <li class="active">
+                    <a href="{% url 'rides' %}"><i class="fa fa-motorcycle"></i> <span class="nav-label active">Rides</span></a>
+                </li>
+            {% elif page_settings %}
+                <li class="active">
+                    <a href="{% url 'rides' %}"><i class="fa fa-motorcycle"></i> <span class="nav-label active">Rides</span></a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'rides' %}"><i class="fa fa-motorcycle"></i> <span class="nav-label active">Rides</span></a>
+                </li>
+            {% endif %}
+
+            {% if page_promo %}
+                <li class="active">
+                    <a href="{% url 'promo' %}"><i class="fa fa-credit-card"></i> <span class="nav-label active">Coupon</span></a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'promo' %}"><i class="fa fa-credit-card"></i> <span class="nav-label active">Coupon</span></a>
+                </li>
+            {% endif %}
+
+            {% if page_accounts %}
+                <li class="active">
+                    <a href="{% url 'accounts' %}"><i class="fa fa-usd"></i> <span class="nav-label active">Accounts</span></a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'accounts' %}"><i class="fa fa-usd"></i> <span class="nav-label active">Accounts</span></a>
+                </li>
+            {% endif %}
+
+            {% if page_userdir %}
+                <li class="active">
+                    <a href="{% url 'user_directory' %}"><i class="fa fa-book"></i> <span class="nav-label active">User Directory</span></a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'user_directory' %}"><i class="fa fa-book"></i> <span class="nav-label active">User Directory</span></a>
+                </li>
+            {% endif %}
+
+
+            {% if page_vehicle %}
+                <li class="active">
+                    <a href="{% url 'vehicle_list' %}"><i class="fa fa-flag"></i> <span class="nav-label active">Vehicle List</span></a>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{% url 'vehicle_list' %}"><i class="fa fa-flag"></i> <span class="nav-label active">Vehicle List</span></a>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
