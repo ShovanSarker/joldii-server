@@ -162,7 +162,7 @@ class StartTrip(View):
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
             return HttpResponse(response.respond(), content_type="application/json")
         if SessionModel.objects.filter(session_id=request.POST[consts.PARAM_SESSION_ID],
-                                       driver_status=consts.STATUS_DRIVER_APPROACHING_PICKUP).exisits():
+                                       driver_status=consts.STATUS_DRIVER_APPROACHING_PICKUP).exists():
             try:
                 ride_id = request.POST[consts.PARAM_ORDER_ID]
                 pickup_lat = request.POST[consts.PARAM_LAT_FROM]
@@ -219,7 +219,7 @@ class EndTrip(View):
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
             return HttpResponse(response.respond(), content_type="application/json")
         if SessionModel.objects.filter(session_id=request.POST[consts.PARAM_SESSION_ID],
-                                       driver_status=consts.STATUS_DRIVER_APPROACHING_PICKUP).exisits():
+                                       driver_status=consts.STATUS_DRIVER_IN_RIDE).exists():
             try:
                 ride_id = request.POST[consts.PARAM_ORDER_ID]
                 drop_lat = request.POST[consts.PARAM_LAT_TO]
@@ -239,8 +239,26 @@ class EndTrip(View):
                 driver_session = SessionModel.objects.get(user=user)
                 driver_session.driver_status = consts.STATUS_DRIVER_ONLINE
                 driver_session.save()
+
+                order_data = {
+                    'trip_order_id': selected_trip.ride_id,
+                    'user': selected_trip.user.username,
+                    'driver': selected_trip.driver.user.username,
+                    'vehicle_class': selected_trip.vehicle_class.name,
+                    'vehicle_class_base_fare': selected_trip.vehicle_class.base_fare,
+                    'vehicle_class_per_kilometer_fare': selected_trip.vehicle_class.per_kilometer_fare,
+                    'vehicle_class_per_minute_fare': selected_trip.vehicle_class.per_minute_fare,
+                    'vehicle': selected_trip.vehicle.registration_number,
+                    'pickup_lat': selected_trip.pickup_lat,
+                    'pickup_lon': selected_trip.pickup_lon,
+                    'drop_lat': selected_trip.drop_lat,
+                    'drop_lon': selected_trip.drop_lon,
+                    'discount': selected_trip.discount
+                }
+
                 response = common_response.CommonResponse(success=True,
-                                                          reason='Ride Successfully Started',
+                                                          data=order_data,
+                                                          reason='Ride Successfully Finished',
                                                           error_code=consts.ERROR_NONE)
                 return HttpResponse(response.respond(), content_type="application/json")
             except:
@@ -424,6 +442,86 @@ class NotifyUser(View):
             response = common_response.CommonResponse(success=True,
                                                       reason='New Order',
                                                       data=trip_data,
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Order',
+                                                      error_code=consts.ERROR_INCORRECT_RIDE_ID)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+class UserCancelRide(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+            oid ==> order id
+    """
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            oid = request.POST[consts.PARAM_ORDER_ID]
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            this_order = RideModel.objects.get(ride_id=oid)
+            this_order.order_status = consts.STATUS_ORDER_CANCELLED_USER
+            this_order.save()
+            response = common_response.CommonResponse(success=True,
+                                                      reason='Order Successfully Cancelled',
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Order',
+                                                      error_code=consts.ERROR_INCORRECT_RIDE_ID)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+
+class DriverCancelRide(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+            oid ==> order id
+    """
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            oid = request.POST[consts.PARAM_ORDER_ID]
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
+        try:
+            this_order = RideModel.objects.get(ride_id=oid)
+            this_order.order_status = consts.STATUS_ORDER_CANCELLED_DRIVER
+            this_order.save()
+            response = common_response.CommonResponse(success=True,
+                                                      reason='Order Successfully Cancelled',
                                                       error_code=consts.ERROR_NONE)
             return HttpResponse(response.respond(), content_type="application/json")
         except:

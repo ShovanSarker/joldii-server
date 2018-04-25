@@ -11,6 +11,8 @@ from joldii.views import RedeemPromo
 from joldii.views import SearchRide
 from joldii.views import StartTrip
 from joldii.views import EndTrip
+from joldii.views import UserCancelRide
+from joldii.views import DriverCancelRide
 from joldii.views import PartnerPosition
 from joldii.views import ToggleDriverStatus
 from joldii.views import UploadDriverInfo
@@ -44,6 +46,8 @@ urlpatterns = [
     url(r'^order_ride', view=SearchRide.as_view(), name="order_ride"),
     url(r'^start_ride', view=StartTrip.as_view(), name="start_ride"),
     url(r'^end_ride', view=EndTrip.as_view(), name="end_ride"),
+    url(r'^user_cancel_ride', view=UserCancelRide.as_view(), name="user_cancel_ride"),
+    url(r'^driver_cancel_ride', view=DriverCancelRide.as_view(), name="driver_cancel_ride"),
     url(r'^partner_position', view=PartnerPosition.as_view(), name="partner_position"),
     url(r'^update_driver_position', view=ToggleDriverStatus.as_view(), name="update_driver_position"),
     url(r'^test/users', view=Users.as_view(), name="test_users"),
