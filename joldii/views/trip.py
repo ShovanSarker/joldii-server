@@ -268,7 +268,7 @@ class EndTrip(View):
                 return HttpResponse(response.respond(), content_type="application/json")
         else:
             response = common_response.CommonResponse(success=False,
-                                                      reason='Driver Can Not Start Ride',
+                                                      reason='Driver Can Not End Ride',
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
             return HttpResponse(response.respond(), content_type="application/json")
 
@@ -403,6 +403,24 @@ class NotifyDriver(View):
             }
             response = common_response.CommonResponse(success=True,
                                                       reason='New Order',
+                                                      data=trip_data,
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        elif RideModel.objects.filter(driver=driver_profile, order_status=consts.STATUS_ORDER_STARTED).exists():
+            current_trip = RideModel.objects.get(driver=driver_profile,
+                                                 order_status=consts.STATUS_ORDER_STARTED)
+            trip_data = {
+                'ride_id': current_trip.ride_id,
+                'user_name': current_trip.user.username,
+                'user_phone': current_trip.user.phone,
+                'user_rating': current_trip.user.average_rating,
+                'pickup_lat': str(current_trip.pickup_lat),
+                'pickup_lon': str(current_trip.pickup_lon),
+                'drop_lat': str(current_trip.drop_lat),
+                'drop_lon': str(current_trip.drop_lon)
+            }
+            response = common_response.CommonResponse(success=True,
+                                                      reason='In Ride',
                                                       data=trip_data,
                                                       error_code=consts.ERROR_NONE)
             return HttpResponse(response.respond(), content_type="application/json")

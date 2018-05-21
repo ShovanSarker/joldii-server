@@ -30,7 +30,7 @@ SECRET_KEY = '_dejk&oxu2617bl@7lqkb*ki2@&d&&-4^_bgx@hyv677x6h*m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.20.6", "192.168.20.10", "10.0.2.2", "core.chandergari.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "192.168.20.6", "192.168.30.10", "10.0.2.2", "core.chandergari.com"]
 
 # Application definition
 

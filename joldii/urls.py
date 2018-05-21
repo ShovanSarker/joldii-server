@@ -49,7 +49,7 @@ urlpatterns = [
     url(r'^user_cancel_ride', view=UserCancelRide.as_view(), name="user_cancel_ride"),
     url(r'^driver_cancel_ride', view=DriverCancelRide.as_view(), name="driver_cancel_ride"),
     url(r'^partner_position', view=PartnerPosition.as_view(), name="partner_position"),
-    url(r'^update_driver_position', view=ToggleDriverStatus.as_view(), name="update_driver_position"),
+    url(r'^driver_status', view=ToggleDriverStatus.as_view(), name="driver_status"),
     url(r'^test/users', view=Users.as_view(), name="test_users"),
     url(r'^test/sessions', view=SessionList.as_view(), name="test_sessions"),
 
