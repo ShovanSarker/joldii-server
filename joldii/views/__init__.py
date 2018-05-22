@@ -14,6 +14,7 @@ from joldii.views.trip import PartnerPosition
 from joldii.views.trip import ToggleDriverStatus
 from joldii.views.trip import NotifyDriver
 from joldii.views.trip import NotifyUser
+from joldii.views.trip import GetHistory
 from joldii.views.session import UploadDriverInfo
 from joldii.views.session import UploadVehicleInfo
 from joldii.views.session import GetVehicleInfo
@@ -32,6 +33,7 @@ __all__ = ["Register",
            "SearchRide",
            "StartTrip",
            "EndTrip",
+           "GetHistory",
            "DriverCancelRide",
            "UserCancelRide",
            "PartnerPosition",

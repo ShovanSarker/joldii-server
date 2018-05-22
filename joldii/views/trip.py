@@ -14,6 +14,7 @@ from joldii.models import DriverModel
 from joldii.responses import common_response
 
 import datetime, pytz
+import math
 
 
 class SearchRide(View):
@@ -247,11 +248,19 @@ class EndTrip(View):
                 selected_trip.drop_lat = drop_lat
                 selected_trip.drop_lon = drop_lon
                 selected_trip.distance = float(distance)
+                distance_in_km = float(distance) / float(1000)
                 selected_trip.order_status = consts.STATUS_ORDER_COMPLETED
                 time_end = datetime.datetime.now().replace(microsecond=0, tzinfo=pytz.UTC)
                 time_start = selected_trip.time_start.replace(microsecond=0, tzinfo=pytz.UTC)
-                print str(time_end-time_start)
-
+                selected_trip.duration = int((time_end-time_start).seconds)
+                duration_in_min = (int((time_end-time_start).seconds) / 60 ) + 1
+                selected_trip.base_fare = selected_trip.vehicle_class.base_fare
+                total_bill = float(selected_trip.vehicle_class.base_fare)
+                total_bill = total_bill + float(duration_in_min * selected_trip.vehicle_class.per_minute_fare)
+                total_bill = total_bill + float(distance_in_km * selected_trip.vehicle_class.per_kilometer_fare)
+                total_bill = math.ceil(total_bill - (total_bill / 100.00 * float(selected_trip.discount)))
+                # print str(time_end-time_start)
+                selected_trip.total_bill = total_bill
                 selected_trip.save()
                 driver_session = SessionModel.objects.get(user=user)
                 driver_session.driver_status = consts.STATUS_DRIVER_ONLINE
@@ -270,6 +279,9 @@ class EndTrip(View):
                     'pickup_lon': str(selected_trip.pickup_lon),
                     'drop_lat': str(selected_trip.drop_lat),
                     'drop_lon': str(selected_trip.drop_lon),
+                    'distance': str(distance_in_km),
+                    'duration': str(duration_in_min),
+                    'total_bill': str(total_bill),
                     'discount': str(selected_trip.discount)
                 }
 
@@ -572,3 +584,73 @@ class DriverCancelRide(View):
                                                       reason='Incorrect Order',
                                                       error_code=consts.ERROR_INCORRECT_RIDE_ID)
             return HttpResponse(response.respond(), content_type="application/json")
+
+
+class GetHistory(View):
+    """
+    todo add this to wiki
+    Quick Doc
+    param   sid
+            app_type = driver/user
+    """
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+            app_type = request.POST[consts.PARAM_APP_TYPE]
+            trip_data = []
+            if app_type == 'driver':
+                driver_profile = DriverModel.objects.get(user=user)
+                all_trips_of_this_driver = RideModel.objects.filter(driver=driver_profile)
+                for selected_trip in all_trips_of_this_driver:
+                    order_data = {
+                        'trip_order_id': selected_trip.ride_id,
+                        'user': selected_trip.user.username,
+                        'vehicle_class': selected_trip.vehicle_class.name,
+                        'vehicle_class_base_fare': selected_trip.vehicle_class.base_fare,
+                        'vehicle_class_per_kilometer_fare': selected_trip.vehicle_class.per_kilometer_fare,
+                        'vehicle_class_per_minute_fare': selected_trip.vehicle_class.per_minute_fare,
+                        'pickup_lat': str(selected_trip.pickup_lat),
+                        'pickup_lon': str(selected_trip.pickup_lon),
+                        'drop_lat': str(selected_trip.drop_lat),
+                        'drop_lon': str(selected_trip.drop_lon),
+                        'distance': str(distance_in_km),
+                        'duration': str(duration_in_min),
+                        'total_bill': str(total_bill),
+                        'discount': str(selected_trip.discount)
+                    }
+                    trip_data.append(order_data)
+            else:
+                all_trips_of_this_user = RideModel.objects.filter(user=user)
+                for selected_trip in all_trips_of_this_user:
+                    order_data = {
+                        'trip_order_id': selected_trip.ride_id,
+                        'driver': selected_trip.driver.user.username,
+                        'vehicle_class': selected_trip.vehicle_class.name,
+                        'vehicle_class_base_fare': selected_trip.vehicle_class.base_fare,
+                        'vehicle_class_per_kilometer_fare': selected_trip.vehicle_class.per_kilometer_fare,
+                        'vehicle_class_per_minute_fare': selected_trip.vehicle_class.per_minute_fare,
+                        'pickup_lat': str(selected_trip.pickup_lat),
+                        'pickup_lon': str(selected_trip.pickup_lon),
+                        'drop_lat': str(selected_trip.drop_lat),
+                        'drop_lon': str(selected_trip.drop_lon),
+                        'distance': str(distance_in_km),
+                        'duration': str(duration_in_min),
+                        'total_bill': str(total_bill),
+                        'discount': str(selected_trip.discount)
+                    }
+                    trip_data.append(order_data)
+
+            response = common_response.CommonResponse(success=True,
+                                                      data=trip_data,
+                                                      reason='History Successfully Sent',
+                                                      error_code=consts.ERROR_NONE)
+            return HttpResponse(response.respond(), content_type="application/json")
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+
