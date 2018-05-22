@@ -38,12 +38,18 @@ class Login(View):
                     existing_sessions = SessionModel.objects.filter(user=user)
                     for existing_session in existing_sessions:
                         existing_session.delete()
+                if DriverModel.objects.filter(user=user).exists():
+                    session = SessionModel(
+                        user=user,
+                        is_driver=is_driver,
+                        driver_profile=DriverModel.objects.get(user=user)
+                    )
+                else:
+                    session = SessionModel(
+                        user=user,
+                        is_driver=is_driver,
 
-                session = SessionModel(
-                    user=user,
-                    is_driver=is_driver
-
-                )
+                    )
                 session.save()
                 if is_driver:
                     if DriverModel.objects.filter(user=user).exists():

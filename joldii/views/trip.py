@@ -13,6 +13,8 @@ from joldii.models import DriverModel
 
 from joldii.responses import common_response
 
+import datetime, pytz
+
 
 class SearchRide(View):
 
@@ -178,6 +180,7 @@ class StartTrip(View):
                 selected_trip.pickup_lat = pickup_lat
                 selected_trip.pickup_lon = pickup_lon
                 selected_trip.order_status = consts.STATUS_ORDER_STARTED
+                selected_trip.time_start = datetime.datetime.now()
                 selected_trip.save()
                 driver_session = SessionModel.objects.get(user=user)
                 driver_session.driver_status = consts.STATUS_DRIVER_IN_RIDE
@@ -206,10 +209,14 @@ class EndTrip(View):
             oid ==> order id
             lat_to
             long_to
+            distance
     """
 
     @staticmethod
     def post(request):
+        print("********")
+        print(request.POST)
+        print("********")
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -224,6 +231,11 @@ class EndTrip(View):
                 ride_id = request.POST[consts.PARAM_ORDER_ID]
                 drop_lat = request.POST[consts.PARAM_LAT_TO]
                 drop_lon = request.POST[consts.PARAM_LNG_TO]
+                distance = request.POST[consts.PARAM_DISTANCE]
+                try:
+                    distance = float(distance)
+                except:
+                    distance = 0
             except:
                 response = common_response.CommonResponse(success=False,
                                                           reason='Incorrect Parameters',
@@ -234,7 +246,12 @@ class EndTrip(View):
                 selected_trip = RideModel.objects.get(ride_id=ride_id)
                 selected_trip.drop_lat = drop_lat
                 selected_trip.drop_lon = drop_lon
+                selected_trip.distance = float(distance)
                 selected_trip.order_status = consts.STATUS_ORDER_COMPLETED
+                time_end = datetime.datetime.now().replace(microsecond=0, tzinfo=pytz.UTC)
+                time_start = selected_trip.time_start.replace(microsecond=0, tzinfo=pytz.UTC)
+                print str(time_end-time_start)
+
                 selected_trip.save()
                 driver_session = SessionModel.objects.get(user=user)
                 driver_session.driver_status = consts.STATUS_DRIVER_ONLINE
@@ -248,12 +265,12 @@ class EndTrip(View):
                     'vehicle_class_base_fare': selected_trip.vehicle_class.base_fare,
                     'vehicle_class_per_kilometer_fare': selected_trip.vehicle_class.per_kilometer_fare,
                     'vehicle_class_per_minute_fare': selected_trip.vehicle_class.per_minute_fare,
-                    'vehicle': selected_trip.vehicle.registration_number,
-                    'pickup_lat': selected_trip.pickup_lat,
-                    'pickup_lon': selected_trip.pickup_lon,
-                    'drop_lat': selected_trip.drop_lat,
-                    'drop_lon': selected_trip.drop_lon,
-                    'discount': selected_trip.discount
+                    # 'vehicle': selected_trip.vehicle.registration_number,
+                    'pickup_lat': str(selected_trip.pickup_lat),
+                    'pickup_lon': str(selected_trip.pickup_lon),
+                    'drop_lat': str(selected_trip.drop_lat),
+                    'drop_lon': str(selected_trip.drop_lon),
+                    'discount': str(selected_trip.discount)
                 }
 
                 response = common_response.CommonResponse(success=True,
@@ -333,18 +350,24 @@ class ToggleDriverStatus(View):
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user_session = SessionModel.objects.get(session_id=sess_id)
-            driver_status = request.POST[consts.PARAM_DRIVER_STATUS]
-            if driver_status == 'online':
-                user_session.driver_status = consts.STATUS_DRIVER_ONLINE
-                user_session.save()
-            if driver_status == 'offline':
-                user_session.driver_status = consts.STATUS_DRIVER_OFFLINE
-                user_session.save()
+            if user_session.driver_status == 1 or user_session.driver_status == 0:
+                driver_status = request.POST[consts.PARAM_DRIVER_STATUS]
+                if driver_status == 'online':
+                    user_session.driver_status = consts.STATUS_DRIVER_ONLINE
+                    user_session.save()
+                if driver_status == 'offline':
+                    user_session.driver_status = consts.STATUS_DRIVER_OFFLINE
+                    user_session.save()
 
-            response = common_response.CommonResponse(success=True,
-                                                      reason='Status Successfully Updated',
-                                                      error_code=consts.ERROR_NONE)
-            return HttpResponse(response.respond(), content_type="application/json")
+                response = common_response.CommonResponse(success=True,
+                                                          reason='Status Successfully Updated',
+                                                          error_code=consts.ERROR_NONE)
+                return HttpResponse(response.respond(), content_type="application/json")
+            else:
+                response = common_response.CommonResponse(success=False,
+                                                          reason='Driver In Ride or Not Driver',
+                                                          error_code=consts.ERROR_USER_NOT_DRIVER)
+                return HttpResponse(response.respond(), content_type="application/json")
         except:
             response = common_response.CommonResponse(success=False,
                                                       reason='Invalid Session',
@@ -361,6 +384,7 @@ class NotifyDriver(View):
 
     @staticmethod
     def post(request):
+        print(request.POST)
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -441,6 +465,7 @@ class NotifyUser(View):
 
     @staticmethod
     def post(request):
+        print(request.POST)
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
