@@ -26,6 +26,7 @@ class RideModel(BaseModel):
     discount = models.IntegerField(default=0)
     total_bill = models.FloatField(default=0)
     order_status = models.IntegerField(default=0)
+    time_start = models.DateTimeField(null=True, blank=True, auto_now=False, auto_now_add=False)
 
     class Meta:
         app_label = "joldii"

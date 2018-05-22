@@ -8,6 +8,8 @@ from joldii.views.promo import RedeemPromo
 from joldii.views.trip import SearchRide
 from joldii.views.trip import StartTrip
 from joldii.views.trip import EndTrip
+from joldii.views.trip import DriverCancelRide
+from joldii.views.trip import UserCancelRide
 from joldii.views.trip import PartnerPosition
 from joldii.views.trip import ToggleDriverStatus
 from joldii.views.trip import NotifyDriver
@@ -22,16 +24,6 @@ from joldii.views.test import SessionList
 
 __all__ = ["Register",
            "Login",
-           "dashboard",
-           "login",
-           "users",
-           "rides",
-           "ride_detail",
-           "ride_settings",
-           "promo",
-           "accounts",
-           "user_directory",
-           "vehicle_list",
            "UploadLocation",
            "AddVehicle",
            "GetRideInformation",
@@ -40,6 +32,8 @@ __all__ = ["Register",
            "SearchRide",
            "StartTrip",
            "EndTrip",
+           "DriverCancelRide",
+           "UserCancelRide",
            "PartnerPosition",
            "ToggleDriverStatus",
            "UploadDriverInfo",
