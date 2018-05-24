@@ -253,13 +253,14 @@ class EndTrip(View):
                 time_end = datetime.datetime.now().replace(microsecond=0, tzinfo=pytz.UTC)
                 time_start = selected_trip.time_start.replace(microsecond=0, tzinfo=pytz.UTC)
                 selected_trip.duration = int((time_end-time_start).seconds)
-                duration_in_min = (int((time_end-time_start).seconds) / 60 ) + 1
+                duration_in_min = (int((time_end-time_start).seconds) / 60) + 1
                 selected_trip.base_fare = selected_trip.vehicle_class.base_fare
                 total_bill = float(selected_trip.vehicle_class.base_fare)
                 total_bill = total_bill + float(duration_in_min * selected_trip.vehicle_class.per_minute_fare)
                 total_bill = total_bill + float(distance_in_km * selected_trip.vehicle_class.per_kilometer_fare)
                 total_bill = math.ceil(total_bill - (total_bill / 100.00 * float(selected_trip.discount)))
                 # print str(time_end-time_start)
+                selected_trip.duration = int((time_end-time_start).seconds)
                 selected_trip.total_bill = total_bill
                 selected_trip.save()
                 driver_session = SessionModel.objects.get(user=user)
@@ -332,6 +333,7 @@ class PartnerPosition(View):
             order_driver = SessionModel.objects.get(user=this_order.driver.user)
             order_user = SessionModel.objects.get(user=this_order.user)
             partner_data = {
+                'ride_status': str(this_order.order_status),
                 'driver_lat': str(order_driver.current_lat),
                 'driver_lon': str(order_driver.current_lon),
                 'user_lat': str(order_user.current_lat),
@@ -600,57 +602,58 @@ class GetHistory(View):
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
             app_type = request.POST[consts.PARAM_APP_TYPE]
-            trip_data = []
-            if app_type == 'driver':
-                driver_profile = DriverModel.objects.get(user=user)
-                all_trips_of_this_driver = RideModel.objects.filter(driver=driver_profile)
-                for selected_trip in all_trips_of_this_driver:
-                    order_data = {
-                        'trip_order_id': selected_trip.ride_id,
-                        'user': selected_trip.user.username,
-                        'vehicle_class': selected_trip.vehicle_class.name,
-                        'vehicle_class_base_fare': selected_trip.vehicle_class.base_fare,
-                        'vehicle_class_per_kilometer_fare': selected_trip.vehicle_class.per_kilometer_fare,
-                        'vehicle_class_per_minute_fare': selected_trip.vehicle_class.per_minute_fare,
-                        'pickup_lat': str(selected_trip.pickup_lat),
-                        'pickup_lon': str(selected_trip.pickup_lon),
-                        'drop_lat': str(selected_trip.drop_lat),
-                        'drop_lon': str(selected_trip.drop_lon),
-                        'distance': str(distance_in_km),
-                        'duration': str(duration_in_min),
-                        'total_bill': str(total_bill),
-                        'discount': str(selected_trip.discount)
-                    }
-                    trip_data.append(order_data)
-            else:
-                all_trips_of_this_user = RideModel.objects.filter(user=user)
-                for selected_trip in all_trips_of_this_user:
-                    order_data = {
-                        'trip_order_id': selected_trip.ride_id,
-                        'driver': selected_trip.driver.user.username,
-                        'vehicle_class': selected_trip.vehicle_class.name,
-                        'vehicle_class_base_fare': selected_trip.vehicle_class.base_fare,
-                        'vehicle_class_per_kilometer_fare': selected_trip.vehicle_class.per_kilometer_fare,
-                        'vehicle_class_per_minute_fare': selected_trip.vehicle_class.per_minute_fare,
-                        'pickup_lat': str(selected_trip.pickup_lat),
-                        'pickup_lon': str(selected_trip.pickup_lon),
-                        'drop_lat': str(selected_trip.drop_lat),
-                        'drop_lon': str(selected_trip.drop_lon),
-                        'distance': str(distance_in_km),
-                        'duration': str(duration_in_min),
-                        'total_bill': str(total_bill),
-                        'discount': str(selected_trip.discount)
-                    }
-                    trip_data.append(order_data)
-
-            response = common_response.CommonResponse(success=True,
-                                                      data=trip_data,
-                                                      reason='History Successfully Sent',
-                                                      error_code=consts.ERROR_NONE)
-            return HttpResponse(response.respond(), content_type="application/json")
         except:
             response = common_response.CommonResponse(success=False,
                                                       reason='Invalid Session',
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
             return HttpResponse(response.respond(), content_type="application/json")
+        trip_data = []
+        if app_type == 'driver':
+            driver_profile = DriverModel.objects.get(user=user)
+            all_trips_of_this_driver = RideModel.objects.filter(driver=driver_profile, order_status=3)
+            for selected_trip in all_trips_of_this_driver:
+                order_data = {
+                    'trip_order_id': selected_trip.ride_id,
+                    'user': selected_trip.user.username,
+                    'vehicle_class': selected_trip.vehicle_class.name,
+                    'vehicle_class_base_fare': selected_trip.vehicle_class.base_fare,
+                    'vehicle_class_per_kilometer_fare': selected_trip.vehicle_class.per_kilometer_fare,
+                    'vehicle_class_per_minute_fare': selected_trip.vehicle_class.per_minute_fare,
+                    'pickup_lat': str(selected_trip.pickup_lat),
+                    'pickup_lon': str(selected_trip.pickup_lon),
+                    'drop_lat': str(selected_trip.drop_lat),
+                    'drop_lon': str(selected_trip.drop_lon),
+                    'distance': str(float(selected_trip.distance) / float(1000)),
+                    'duration': str((int(selected_trip.duration) / 60) + 1),
+                    'total_bill': str(selected_trip.total_bill),
+                    'discount': str(selected_trip.discount)
+                }
+                trip_data.append(order_data)
+        else:
+            all_trips_of_this_user = RideModel.objects.filter(user=user, order_status=3)
+            for selected_trip in all_trips_of_this_user:
+                order_data = {
+                    'trip_order_id': selected_trip.ride_id,
+                    'driver': selected_trip.driver.user.username,
+                    'vehicle_class': selected_trip.vehicle_class.name,
+                    'vehicle_class_base_fare': selected_trip.vehicle_class.base_fare,
+                    'vehicle_class_per_kilometer_fare': selected_trip.vehicle_class.per_kilometer_fare,
+                    'vehicle_class_per_minute_fare': selected_trip.vehicle_class.per_minute_fare,
+                    'pickup_lat': str(selected_trip.pickup_lat),
+                    'pickup_lon': str(selected_trip.pickup_lon),
+                    'drop_lat': str(selected_trip.drop_lat),
+                    'drop_lon': str(selected_trip.drop_lon),
+                    'distance': str(float(selected_trip.distance) / float(1000)),
+                    'duration': str((int(selected_trip.duration) / 60) + 1),
+                    'total_bill': str(selected_trip.total_bill),
+                    'discount': str(selected_trip.discount)
+                }
+                trip_data.append(order_data)
+
+        response = common_response.CommonResponse(success=True,
+                                                  data=trip_data,
+                                                  reason='History Successfully Sent',
+                                                  error_code=consts.ERROR_NONE)
+        return HttpResponse(response.respond(), content_type="application/json")
+
 
