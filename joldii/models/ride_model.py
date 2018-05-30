@@ -17,6 +17,8 @@ class RideModel(BaseModel):
     vehicle = models.ForeignKey(VehicleModel, related_name='vehicle_model', null=True, blank=True)
     pickup_lat = models.DecimalField(default=0, max_digits=19, decimal_places=10)
     pickup_lon = models.DecimalField(default=0, max_digits=19, decimal_places=10)
+    pickup_place = models.CharField(max_length=32, null=True, blank=True)
+    drop_place = models.CharField(max_length=32, null=True, blank=True)
     drop_lat = models.DecimalField(default=0, max_digits=19, decimal_places=10)
     drop_lon = models.DecimalField(default=0, max_digits=19, decimal_places=10)
     path = models.CharField(max_length=1024, null=True, blank=True)
