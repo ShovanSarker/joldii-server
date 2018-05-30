@@ -21,6 +21,8 @@ from joldii.views import NotifyDriver
 from joldii.views import NotifyUser
 from joldii.views import GetVehicleInfo
 from joldii.views import GetHistory
+from joldii.views import RateUser
+from joldii.views import RateDriver
 
 from joldii.views import Users
 from joldii.views import SessionList
@@ -43,6 +45,8 @@ urlpatterns = [
     url(r'^notify_driver', view=NotifyDriver.as_view(), name="notify_driver"),
     url(r'^notify_user', view=NotifyUser.as_view(), name="notify_user"),
     url(r'^get_vehicle_info', view=GetVehicleInfo.as_view(), name="get_vehicle_info"),
+    url(r'^rate_user', view=RateUser.as_view(), name="rate_user"),
+    url(r'^rate_driver', view=RateDriver.as_view(), name="rate_driver"),
 
     url(r'^order_ride', view=SearchRide.as_view(), name="order_ride"),
     url(r'^start_ride', view=StartTrip.as_view(), name="start_ride"),

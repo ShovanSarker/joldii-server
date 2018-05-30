@@ -62,6 +62,8 @@ PARAM_DATA = "data"
 PARAM_ORDER_ID = "oid"
 PARAM_DRIVER_STATUS = "driver_status"
 PARAM_DISTANCE = "distance"
+PARAM_RATING = 'rating'
+PARAM_COMMENT = 'comment'
 
 """
 Actions

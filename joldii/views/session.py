@@ -7,6 +7,9 @@ from joldii.constants import consts
 
 from joldii.models import DriverModel
 from joldii.models import UserModel
+from joldii.models import RideModel
+from joldii.models import DriverRatingModel
+from joldii.models import UserRatingModel
 from joldii.models import SessionModel
 from joldii.models import VehicleModel
 from joldii.models import VehicleClassModel
@@ -322,5 +325,117 @@ class GetVehicleInfo(View):
         response = common_response.CommonResponse(success=True,
                                                   data=all_vehicle_type_array,
                                                   reason='All Vehicle Type List',
+                                                  error_code=consts.ERROR_NONE)
+        return HttpResponse(response.respond(), content_type="application/json")
+
+
+class RateDriver(View):
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+        try:
+            ride_id = request.POST[consts.PARAM_ORDER_ID]
+            ride = RideModel.objects.get(ride_id=ride_id)
+            ride_user = ride.user
+            ride_driver = ride.driver
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Ride ID',
+                                                      error_code=consts.ERROR_INCORRECT_RIDE_ID)
+            return HttpResponse(response.respond(), content_type="application/json")
+        if consts.PARAM_COMMENT in request.POST:
+            comment = request.POST[consts.PARAM_COMMENT]
+        else:
+            comment = ''
+        try:
+            rating = int(request.POST[consts.PARAM_RATING])
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Parameter',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
+        new_rating = DriverRatingModel(
+            user=ride_user,
+            driver=ride_driver,
+            rating=rating,
+            ride=ride,
+            comment=comment
+        )
+        new_rating.save()
+
+        current_rating = ride_driver.average_rating
+        current_ride_count = ride_driver.number_of_rides
+        updated_rating = ((current_rating * float(current_ride_count)) + float(rating)) / float(current_ride_count + 1)
+        updated_ride_count = current_ride_count + 1
+        ride_driver.average_rating = updated_rating
+        ride_driver.number_of_rides = updated_ride_count
+        ride_driver.save()
+        response = common_response.CommonResponse(success=True,
+                                                  reason='Rating Successfully Updated',
+                                                  error_code=consts.ERROR_NONE)
+        return HttpResponse(response.respond(), content_type="application/json")
+
+
+class RateUser(View):
+
+    @staticmethod
+    def post(request):
+        try:
+            sess_id = request.POST[consts.PARAM_SESSION_ID]
+            user = SessionModel.get_user_by_session(sess_id)
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Session',
+                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+            return HttpResponse(response.respond(), content_type="application/json")
+
+        try:
+            ride_id = request.POST[consts.PARAM_ORDER_ID]
+            ride = RideModel.objects.get(ride_id=ride_id)
+            ride_user = ride.user
+            ride_driver = ride.driver
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Ride ID',
+                                                      error_code=consts.ERROR_INCORRECT_RIDE_ID)
+            return HttpResponse(response.respond(), content_type="application/json")
+        if consts.PARAM_COMMENT in request.POST:
+            comment = request.POST[consts.PARAM_COMMENT]
+        else:
+            comment = ''
+        try:
+            rating = int(request.POST[consts.PARAM_RATING])
+        except:
+            response = common_response.CommonResponse(success=False,
+                                                      reason='Invalid Parameter',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
+            return HttpResponse(response.respond(), content_type="application/json")
+        new_rating = UserRatingModel(
+            user=ride_user,
+            driver=ride_driver,
+            rating=rating,
+            ride=ride,
+            comment=comment
+        )
+        new_rating.save()
+
+        current_rating = ride_user.average_rating
+        current_ride_count = ride_user.number_of_rides
+        updated_rating = ((current_rating * float(current_ride_count)) + float(rating)) / float(current_ride_count + 1)
+        updated_ride_count = current_ride_count + 1
+        ride_user.average_rating = updated_rating
+        ride_user.number_of_rides = updated_ride_count
+        ride_user.save()
+        response = common_response.CommonResponse(success=True,
+                                                  reason='Rating Successfully Updated',
                                                   error_code=consts.ERROR_NONE)
         return HttpResponse(response.respond(), content_type="application/json")
