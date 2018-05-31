@@ -152,6 +152,7 @@ class StartTrip(View):
             oid ==> order id
             lat_from
             long_from
+            pickup_place
     """
 
     @staticmethod
@@ -170,6 +171,10 @@ class StartTrip(View):
                 ride_id = request.POST[consts.PARAM_ORDER_ID]
                 pickup_lat = request.POST[consts.PARAM_LAT_FROM]
                 pickup_lon = request.POST[consts.PARAM_LNG_FROM]
+                if consts.PARAM_PICKUP_PLACE in request.POST:
+                    pickup_place = request.POST[consts.PARAM_PICKUP_PLACE]
+                else:
+                    pickup_place = ''
             except:
                 response = common_response.CommonResponse(success=False,
                                                           reason='Incorrect Parameters',
@@ -180,6 +185,7 @@ class StartTrip(View):
                 selected_trip = RideModel.objects.get(ride_id=ride_id)
                 selected_trip.pickup_lat = pickup_lat
                 selected_trip.pickup_lon = pickup_lon
+                selected_trip.pickup_place = pickup_place
                 selected_trip.order_status = consts.STATUS_ORDER_STARTED
                 selected_trip.time_start = datetime.datetime.now()
                 selected_trip.save()
@@ -211,6 +217,7 @@ class EndTrip(View):
             lat_to
             long_to
             distance
+            distance
     """
 
     @staticmethod
@@ -233,6 +240,10 @@ class EndTrip(View):
                 drop_lat = request.POST[consts.PARAM_LAT_TO]
                 drop_lon = request.POST[consts.PARAM_LNG_TO]
                 distance = request.POST[consts.PARAM_DISTANCE]
+                if consts.PARAM_DROP_PLACE in request.POST:
+                    drop_place = request.POST[consts.PARAM_DROP_PLACE]
+                else:
+                    drop_place = ''
                 try:
                     distance = float(distance)
                 except:
@@ -262,6 +273,7 @@ class EndTrip(View):
                 # print str(time_end-time_start)
                 selected_trip.duration = int((time_end-time_start).seconds)
                 selected_trip.total_bill = total_bill
+                selected_trip.drop_place = drop_place
                 selected_trip.save()
                 driver_session = SessionModel.objects.get(user=user)
                 driver_session.driver_status = consts.STATUS_DRIVER_ONLINE

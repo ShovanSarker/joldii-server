@@ -64,6 +64,8 @@ PARAM_DRIVER_STATUS = "driver_status"
 PARAM_DISTANCE = "distance"
 PARAM_RATING = 'rating'
 PARAM_COMMENT = 'comment'
+PARAM_PICKUP_PLACE = 'pickup_place'
+PARAM_DROP_PLACE = 'drop_place'
 
 """
 Actions
