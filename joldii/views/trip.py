@@ -87,7 +87,7 @@ class SearchRide(View):
                     return HttpResponse(response.respond(), content_type="application/json")
                 else:
                     print()
-                    new_order.driver = selected_driver.driver_profile
+                    new_order.driver = DriverModel.objects.get(user=selected_driver.user)
                     # new_order.vehicle = selected_driver.current_vehicle
                     new_order.order_status = consts.STATUS_ORDER_CONFIRMED
                     new_order.save()
