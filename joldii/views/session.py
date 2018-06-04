@@ -258,12 +258,17 @@ class UploadDriverInfo(View):
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
             return HttpResponse(response.respond(), content_type="application/json")
         try:
-
+            if consts.PARAM_DRIVER_NATIONAL_ID_IMAGE in request.FILES:
+                national_id_image = request.FILES[consts.PARAM_DRIVER_NATIONAL_ID_IMAGE]
+                driving_license_image = request.FILES[consts.PARAM_DRIVER_LICENSE_IMAGE]
+            else:
+                national_id_image = None
+                driving_license_image = None
             driver = DriverModel(user=user,
                                  national_id=request.POST[consts.PARAM_DRIVER_NATIONAL_ID],
-                                 national_id_image=request.FILES[consts.PARAM_DRIVER_NATIONAL_ID_IMAGE],
-                                 driving_license=request.FILES[consts.PARAM_DRIVER_LICENSE],
-                                 driving_license_image=request.POST[consts.PARAM_DRIVER_LICENSE_IMAGE])
+                                 national_id_image=national_id_image,
+                                 driving_license=request.POST[consts.PARAM_DRIVER_LICENSE],
+                                 driving_license_image=driving_license_image)
 
             driver.save()
             response = common_response.CommonResponse(success=True,
@@ -272,8 +277,8 @@ class UploadDriverInfo(View):
             return HttpResponse(response.respond(), content_type="application/json")
         except:
             response = common_response.CommonResponse(success=False,
-                                                      reason='Invalid Session',
-                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
             return HttpResponse(response.respond(), content_type="application/json")
 
 
@@ -290,13 +295,17 @@ class UploadVehicleInfo(View):
                                                       error_code=consts.ERROR_INCORRECT_SESSION)
             return HttpResponse(response.respond(), content_type="application/json")
         try:
+            if consts.PARAM_VEHICLE_REG_PHOTO in request.FILES:
+                registration_certificate_image = request.FILES[consts.PARAM_VEHICLE_REG_PHOTO]
+            else:
+                registration_certificate_image = None
             driver = DriverModel.objects.get(user=user)
             vehicle_class = VehicleClassModel.objects.get(pk=request.POST[consts.PARAM_VEHICLE_TYPE_ID])
             new_vehicle = VehicleModel(registration_number=request.POST[consts.PARAM_VEHICLE_NUMBER],
                                        color=request.POST[consts.PARAM_VEHICLE_COLOR],
                                        model=request.POST[consts.PARAM_VEHICLE_NAME],
                                        ride_class=vehicle_class,
-                                       registration_certificate_image=request.FILES[consts.PARAM_VEHICLE_NUMBER_PHOTO],
+                                       registration_certificate_image=registration_certificate_image,
                                        driver=driver)
             new_vehicle.save()
             response = common_response.CommonResponse(success=True,
