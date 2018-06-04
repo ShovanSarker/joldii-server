@@ -340,27 +340,27 @@ class PartnerPosition(View):
                                                       reason='Incorrect Parameters',
                                                       error_code=consts.ERROR_INCORRECT_PARAMETERS)
             return HttpResponse(response.respond(), content_type="application/json")
-        try:
-            this_order = RideModel.objects.get(ride_id=oid)
-            order_driver = SessionModel.objects.get(user=this_order.driver.user)
-            order_user = SessionModel.objects.get(user=this_order.user)
-            partner_data = {
-                'ride_status': str(this_order.order_status),
-                'driver_lat': str(order_driver.current_lat),
-                'driver_lon': str(order_driver.current_lon),
-                'user_lat': str(order_user.current_lat),
-                'user_lon': str(order_user.current_lon)
-            }
-            response = common_response.CommonResponse(success=True,
-                                                      reason='Updated Location',
-                                                      data=partner_data,
-                                                      error_code=consts.ERROR_NONE)
-            return HttpResponse(response.respond(), content_type="application/json")
-        except:
-            response = common_response.CommonResponse(success=False,
-                                                      reason='Incorrect Order',
-                                                      error_code=consts.ERROR_INCORRECT_RIDE_ID)
-            return HttpResponse(response.respond(), content_type="application/json")
+        # try:
+        this_order = RideModel.objects.get(ride_id=oid)
+        order_driver = SessionModel.objects.get(user=this_order.driver.user)
+        order_user = SessionModel.objects.get(user=this_order.user)
+        partner_data = {
+            'ride_status': str(this_order.order_status),
+            'driver_lat': str(order_driver.current_lat),
+            'driver_lon': str(order_driver.current_lon),
+            'user_lat': str(order_user.current_lat),
+            'user_lon': str(order_user.current_lon)
+        }
+        response = common_response.CommonResponse(success=True,
+                                                  reason='Updated Location',
+                                                  data=partner_data,
+                                                  error_code=consts.ERROR_NONE)
+        return HttpResponse(response.respond(), content_type="application/json")
+        # except:
+        #     response = common_response.CommonResponse(success=False,
+        #                                               reason='Incorrect Order',
+        #                                               error_code=consts.ERROR_INCORRECT_RIDE_ID)
+        #     return HttpResponse(response.respond(), content_type="application/json")
 
 
 class ToggleDriverStatus(View):
