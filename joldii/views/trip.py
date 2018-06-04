@@ -21,6 +21,7 @@ class SearchRide(View):
 
     @staticmethod
     def post(request):
+        print "*** SearchRide ***"
         print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
@@ -157,6 +158,8 @@ class StartTrip(View):
 
     @staticmethod
     def post(request):
+        print "*** StartTrip ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -222,9 +225,8 @@ class EndTrip(View):
 
     @staticmethod
     def post(request):
-        print("********")
-        print(request.POST)
-        print("********")
+        print "*** EndTrip ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -325,6 +327,8 @@ class PartnerPosition(View):
 
     @staticmethod
     def post(request):
+        print "*** PartnerPosition ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -373,6 +377,8 @@ class ToggleDriverStatus(View):
 
     @staticmethod
     def post(request):
+        print "*** ToggleDriverStatus ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user_session = SessionModel.objects.get(session_id=sess_id)
@@ -410,7 +416,8 @@ class NotifyDriver(View):
 
     @staticmethod
     def post(request):
-        print(request.POST)
+        print "*** NotifyDriver ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -491,7 +498,8 @@ class NotifyUser(View):
 
     @staticmethod
     def post(request):
-        print(request.POST)
+        print "*** NotifyUser ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -530,6 +538,8 @@ class UserCancelRide(View):
 
     @staticmethod
     def post(request):
+        print "*** UserCancelRide ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -570,6 +580,8 @@ class DriverCancelRide(View):
 
     @staticmethod
     def post(request):
+        print "*** DriverCancelRide ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -610,6 +622,8 @@ class GetHistory(View):
 
     @staticmethod
     def post(request):
+        print "*** GetHistory ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
