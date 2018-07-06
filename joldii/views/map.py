@@ -17,6 +17,8 @@ from joldii.responses import common_response
 class UploadLocation(View):
     @staticmethod
     def post(request):
+        print "*** UploadLocation ***"
+        print request.POST
         response = UpdateLocationResponse()
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
@@ -53,7 +55,8 @@ class GetRideInformation(View):
 
     @staticmethod
     def post(request):
-
+        print "*** GetRideInformation ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)

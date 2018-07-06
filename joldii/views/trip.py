@@ -21,6 +21,7 @@ class SearchRide(View):
 
     @staticmethod
     def post(request):
+        print "*** SearchRide ***"
         print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
@@ -86,7 +87,7 @@ class SearchRide(View):
                     return HttpResponse(response.respond(), content_type="application/json")
                 else:
                     print()
-                    new_order.driver = selected_driver.driver_profile
+                    new_order.driver = DriverModel.objects.get(user=selected_driver.user)
                     # new_order.vehicle = selected_driver.current_vehicle
                     new_order.order_status = consts.STATUS_ORDER_CONFIRMED
                     new_order.save()
@@ -157,6 +158,8 @@ class StartTrip(View):
 
     @staticmethod
     def post(request):
+        print "*** StartTrip ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -222,9 +225,8 @@ class EndTrip(View):
 
     @staticmethod
     def post(request):
-        print("********")
-        print(request.POST)
-        print("********")
+        print "*** EndTrip ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -325,6 +327,8 @@ class PartnerPosition(View):
 
     @staticmethod
     def post(request):
+        print "*** PartnerPosition ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -340,27 +344,27 @@ class PartnerPosition(View):
                                                       reason='Incorrect Parameters',
                                                       error_code=consts.ERROR_INCORRECT_PARAMETERS)
             return HttpResponse(response.respond(), content_type="application/json")
-        try:
-            this_order = RideModel.objects.get(ride_id=oid)
-            order_driver = SessionModel.objects.get(user=this_order.driver.user)
-            order_user = SessionModel.objects.get(user=this_order.user)
-            partner_data = {
-                'ride_status': str(this_order.order_status),
-                'driver_lat': str(order_driver.current_lat),
-                'driver_lon': str(order_driver.current_lon),
-                'user_lat': str(order_user.current_lat),
-                'user_lon': str(order_user.current_lon)
-            }
-            response = common_response.CommonResponse(success=True,
-                                                      reason='Updated Location',
-                                                      data=partner_data,
-                                                      error_code=consts.ERROR_NONE)
-            return HttpResponse(response.respond(), content_type="application/json")
-        except:
-            response = common_response.CommonResponse(success=False,
-                                                      reason='Incorrect Order',
-                                                      error_code=consts.ERROR_INCORRECT_RIDE_ID)
-            return HttpResponse(response.respond(), content_type="application/json")
+        # try:
+        this_order = RideModel.objects.get(ride_id=oid)
+        order_driver = SessionModel.objects.get(user=this_order.driver.user)
+        order_user = SessionModel.objects.get(user=this_order.user)
+        partner_data = {
+            'ride_status': str(this_order.order_status),
+            'driver_lat': str(order_driver.current_lat),
+            'driver_lon': str(order_driver.current_lon),
+            'user_lat': str(order_user.current_lat),
+            'user_lon': str(order_user.current_lon)
+        }
+        response = common_response.CommonResponse(success=True,
+                                                  reason='Updated Location',
+                                                  data=partner_data,
+                                                  error_code=consts.ERROR_NONE)
+        return HttpResponse(response.respond(), content_type="application/json")
+        # except:
+        #     response = common_response.CommonResponse(success=False,
+        #                                               reason='Incorrect Order',
+        #                                               error_code=consts.ERROR_INCORRECT_RIDE_ID)
+        #     return HttpResponse(response.respond(), content_type="application/json")
 
 
 class ToggleDriverStatus(View):
@@ -373,6 +377,8 @@ class ToggleDriverStatus(View):
 
     @staticmethod
     def post(request):
+        print "*** ToggleDriverStatus ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user_session = SessionModel.objects.get(session_id=sess_id)
@@ -410,7 +416,8 @@ class NotifyDriver(View):
 
     @staticmethod
     def post(request):
-        print(request.POST)
+        print "*** NotifyDriver ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -491,7 +498,8 @@ class NotifyUser(View):
 
     @staticmethod
     def post(request):
-        print(request.POST)
+        print "*** NotifyUser ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -530,6 +538,8 @@ class UserCancelRide(View):
 
     @staticmethod
     def post(request):
+        print "*** UserCancelRide ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -570,6 +580,8 @@ class DriverCancelRide(View):
 
     @staticmethod
     def post(request):
+        print "*** DriverCancelRide ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -610,6 +622,8 @@ class GetHistory(View):
 
     @staticmethod
     def post(request):
+        print "*** GetHistory ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)

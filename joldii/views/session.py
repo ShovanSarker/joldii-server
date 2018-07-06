@@ -24,6 +24,8 @@ class Login(View):
 
     @staticmethod
     def post(request):
+        print "*** Login ***"
+        print request.POST
         phone = None
         password = None
         try:
@@ -167,6 +169,7 @@ class Register(View):
 
     @staticmethod
     def post(request):
+        print "*** Register ***"
         print request.POST
         optional = True
         user_type = None
@@ -249,6 +252,8 @@ class UploadDriverInfo(View):
 
     @staticmethod
     def post(request):
+        print "*** UploadDriverInfo ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -280,8 +285,8 @@ class UploadDriverInfo(View):
             return HttpResponse(response.respond(), content_type="application/json")
         except:
             response = common_response.CommonResponse(success=False,
-                                                      reason='Invalid Session',
-                                                      error_code=consts.ERROR_INCORRECT_SESSION)
+                                                      reason='Incorrect Parameters',
+                                                      error_code=consts.ERROR_INCORRECT_PARAMETERS)
             return HttpResponse(response.respond(), content_type="application/json")
 
 
@@ -289,6 +294,8 @@ class UploadVehicleInfo(View):
 
     @staticmethod
     def post(request):
+        print "*** UploadVehicleInfo ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -326,6 +333,8 @@ class GetVehicleInfo(View):
 
     @staticmethod
     def post(request):
+        print "*** GetVehicleInfo ***"
+        print request.POST
         all_vehicle_type = VehicleClassModel.objects.all()
         all_vehicle_type_array = []
         for one_vehicle_type in all_vehicle_type:
@@ -345,6 +354,8 @@ class RateDriver(View):
 
     @staticmethod
     def post(request):
+        print "*** RateDriver ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
@@ -401,6 +412,8 @@ class RateUser(View):
 
     @staticmethod
     def post(request):
+        print "*** RateUser ***"
+        print request.POST
         try:
             sess_id = request.POST[consts.PARAM_SESSION_ID]
             user = SessionModel.get_user_by_session(sess_id)
