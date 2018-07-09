@@ -557,8 +557,12 @@ class UserCancelRide(View):
             return HttpResponse(response.respond(), content_type="application/json")
         try:
             this_order = RideModel.objects.get(ride_id=oid)
+            driver = this_order.driver.user
             this_order.order_status = consts.STATUS_ORDER_CANCELLED_USER
             this_order.save()
+            driver_session = SessionModel.objects.get(user=driver)
+            driver_session.driver_status = consts.STATUS_DRIVER_ONLINE
+            driver_session.save()
             response = common_response.CommonResponse(success=True,
                                                       reason='Order Successfully Cancelled',
                                                       error_code=consts.ERROR_NONE)
@@ -599,8 +603,12 @@ class DriverCancelRide(View):
             return HttpResponse(response.respond(), content_type="application/json")
         try:
             this_order = RideModel.objects.get(ride_id=oid)
+            driver = this_order.driver.user
             this_order.order_status = consts.STATUS_ORDER_CANCELLED_DRIVER
             this_order.save()
+            driver_session = SessionModel.objects.get(user=driver)
+            driver_session.driver_status = consts.STATUS_DRIVER_ONLINE
+            driver_session.save()
             response = common_response.CommonResponse(success=True,
                                                       reason='Order Successfully Cancelled',
                                                       error_code=consts.ERROR_NONE)
